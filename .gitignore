@@ -1,0 +1,5 @@
+chroma_db/
+user_voice.wav
+__pycache__/
+.env
+*.pyc
