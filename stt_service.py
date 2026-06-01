@@ -1,4 +1,3 @@
-import pyaudio
 import wave
 from faster_whisper import WhisperModel
 
@@ -6,10 +5,11 @@ from faster_whisper import WhisperModel
 model_size = "base" 
 stt_model = WhisperModel(model_size, device="cpu", compute_type="int8") 
 
-def record_and_transcribe(file_path=None):
+def record_and_transcribe(file_path=None, language="hi"):
     WAVE_OUTPUT_FILENAME = file_path if file_path else "user_voice.wav"
 
     if not file_path:
+        import pyaudio
         CHUNK, FORMAT, CHANNELS, RATE = 1024, pyaudio.paInt16, 1, 16000
         RECORD_SECONDS = 6 
 
@@ -30,10 +30,15 @@ def record_and_transcribe(file_path=None):
             wf.setframerate(RATE)
             wf.writeframes(b''.join(frames))
 
+    # Determine standard Whisper language key (defaults to 'hi' for regional Devanagari dialects)
+    whisper_lang = "hi"
+    if language == "en":
+        whisper_lang = "en"
+
     # Transcribe with legal context bias to help recognize words like 'Registry'
     segments, _ = stt_model.transcribe(
         WAVE_OUTPUT_FILENAME, 
-        language="hi", 
+        language=whisper_lang, 
         beam_size=5,
         initial_prompt="पंजीकरण अधिनियम, रजिस्ट्री, कानूनी दस्तावेज, धारा, नियम।" 
     )

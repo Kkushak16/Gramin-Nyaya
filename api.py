@@ -10,12 +10,13 @@ Year: 2024
 """
 
 import logging
-from fastapi import FastAPI, HTTPException, UploadFile, File
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from rag_logic import ask_gramin_nyaya
 import os
 import json
+import re
 from datetime import datetime
 import stt_service
 
@@ -104,6 +105,13 @@ class ConsultationRequest(BaseModel):
 @app.post("/consultation")
 async def handle_consultation(request: ConsultationRequest):
     logger.info(f"New consultation callback request received for name: {request.name}")
+    
+    # Strict server-side Indian phone number validation
+    cleaned_phone = re.sub(r"[\s\-]", "", request.phone)
+    if not re.match(r"^(?:\+91|91)?[6-9]\d{9}$", cleaned_phone):
+        logger.warning(f"Validation failed: Invalid Indian mobile number format '{request.phone}'")
+        raise HTTPException(status_code=400, detail="Invalid Indian phone number. Please enter a valid 10-digit number.")
+
     try:
         data = {
             "timestamp": datetime.now().isoformat(),
@@ -138,8 +146,8 @@ async def handle_consultation(request: ConsultationRequest):
         raise HTTPException(status_code=500, detail="Failed to save request. Please try again.")
 
 @app.post("/transcribe")
-async def handle_transcription(file: UploadFile = File(...)):
-    logger.info("New audio file received for transcription.")
+async def handle_transcription(file: UploadFile = File(...), lang: str = Form("hi")):
+    logger.info(f"New audio file received for transcription in language: {lang}")
     temp_filename = "uploaded_voice.wav"
     try:
         content = await file.read()
@@ -148,7 +156,7 @@ async def handle_transcription(file: UploadFile = File(...)):
             
         logger.info(f"Successfully saved temp audio file. Proceeding with Whisper inference.")
         
-        transcribed_text = stt_service.record_and_transcribe(file_path=temp_filename)
+        transcribed_text = stt_service.record_and_transcribe(file_path=temp_filename, language=lang)
         
         logger.info(f"Transcription completed: '{transcribed_text}'")
         

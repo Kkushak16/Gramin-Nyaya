@@ -40,7 +40,9 @@ Gramin-Nyaya/
 * **Backend**: FastAPI (Python 3.10+) with robust error-handling mechanisms.
 * **Embeddings**: HuggingFace Multilingual-MiniLM-L12-v2.
 * **Vector Store**: ChromaDB.
-* **Local LLM**: Qwen 2.5 (1.5B) via Ollama (configured with a strictly-grounded temperature of `0.0` for hallucination control).
+* **Local LLM**: Dual-model RAG orchestration via Ollama:
+  - **DeepSeek-R1 (1.5B)**: Precision factual researcher agent (configured with temperature `0.0`).
+  - **Qwen 2.5 (1.5B)**: Communicator agent localized for conversational rural dialect styling (configured with temperature `0.1`).
 
 ---
 
@@ -48,8 +50,9 @@ Gramin-Nyaya/
 
 ### Prerequisites
 1. Install [Ollama](https://ollama.com/) on your local machine.
-2. Pull the required language model:
+2. Pull both required local language models:
    ```bash
+   ollama pull deepseek-r1:1.5b
    ollama pull qwen2.5:1.5b
    ```
 

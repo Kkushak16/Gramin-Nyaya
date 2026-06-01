@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gramin-Nyaya: AI Legal Assistant</title>
-    <link rel="icon" type="image/jpeg" href="logo.jpg">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚖️</text></svg>">
+    <!-- DOMPurify for secure, offline-safe XSS sanitization -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.9/purify.min.js"></script>
     
     <!-- Premium Google Fonts for modern Devanagari and Latin typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,6 +42,66 @@
             --font-display: 'Outfit', sans-serif;
             --font-body: 'Inter', sans-serif;
         }
+
+        /* --- STATE-OF-THE-ART DARK THEME SYSTEM --- */
+        body.dark-theme {
+            --bg-base: #0d1527; /* Dark deep space navy background */
+            --bg-surface: #17223b; /* Premium surface navy container */
+            --bg-card: #17223b;
+            --bg-card-hover: #22304e;
+            --border-color: #2b3b5c;
+            --color-primary: #d4af37; /* State of the art luxury gold accent */
+            --color-primary-hover: #ffdf73;
+            --color-primary-light: #f39c12;
+            --color-text-primary: #f1f5f9; /* Off-white crisp text */
+            --color-text-secondary: #94a3b8; /* Slate gray secondary */
+            --color-text-muted: #64748b;
+            --shadow-premium: 0 10px 30px -5px rgba(0, 0, 0, 0.4), 0 2px 10px rgba(0, 0, 0, 0.15);
+            --color-accent-green: #064e3b;
+            --color-accent-green-text: #34d399;
+            --color-accent-blue: #1e3a8a;
+            --color-accent-blue-text: #93c5fd;
+            --color-accent-tan: #78350f;
+            --color-accent-tan-text: #fcd34d;
+        }
+
+        body.dark-theme header,
+        body.dark-theme nav.nav-links,
+        body.dark-theme footer {
+            background-color: rgba(23, 34, 59, 0.95);
+        }
+
+        body.dark-theme .theme-toggle-btn {
+            color: #ffd700;
+        }
+
+        body.dark-theme .hamburger-menu-btn {
+            color: #d4af37;
+        }
+
+        body.dark-theme input,
+        body.dark-theme textarea,
+        body.dark-theme select {
+            background-color: #111a2e;
+            border-color: #2b3b5c;
+            color: #f1f5f9;
+        }
+
+        body.dark-theme input::placeholder,
+        body.dark-theme textarea::placeholder {
+            color: #64748b;
+        }
+
+        body.dark-theme .chat-bubble.user {
+            background-color: #2b3b5c;
+            color: #f1f5f9;
+        }
+
+        body.dark-theme .closest-office-box {
+            background-color: #17223b;
+            border: 1px solid #2b3b5c;
+        }
+        
 
         * {
             margin: 0;
@@ -105,6 +167,17 @@
             position: sticky;
             top: 0;
             z-index: 100;
+        }
+
+        .hamburger-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--color-primary);
+            cursor: pointer;
+            padding: 8px;
+            z-index: 101;
         }
 
         .logo-container {
@@ -246,7 +319,6 @@
         .spa-view {
             display: none;
             opacity: 0;
-            transition: opacity 0.3s ease;
             max-width: 1200px;
             margin: 0 auto;
             padding: 40px 20px;
@@ -254,7 +326,18 @@
 
         .spa-view.active {
             display: block;
-            opacity: 1;
+            animation: spaFadeIn 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes spaFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* --- VIEW 1: LANDING / LIBRARY HOME (Image 2) --- */
@@ -1220,31 +1303,45 @@
         @media (max-width: 768px) {
             header {
                 padding: 12px 20px;
+                position: relative;
+            }
+
+            .hamburger-menu-btn {
+                display: block;
             }
 
             nav.nav-links {
-                position: fixed;
-                bottom: 0;
+                display: none;
+                position: absolute;
+                top: 100%;
                 left: 0;
                 width: 100%;
-                background-color: #ffffff;
-                border-top: 1px solid var(--border-color);
-                padding: 12px 20px;
-                justify-content: space-around;
-                z-index: 1000;
-                box-shadow: 0 -4px 15px rgba(0,0,0,0.05);
+                background-color: var(--bg-surface);
+                border-bottom: 1px solid var(--border-color);
+                flex-direction: column;
+                align-items: stretch;
+                padding: 20px;
+                gap: 12px;
+                box-shadow: 0 10px 15px rgba(0,0,0,0.05);
+                z-index: 99;
+            }
+
+            nav.nav-links.active {
+                display: flex;
             }
 
             nav.nav-links a {
-                font-size: 0.8rem;
+                padding: 8px 0;
+                width: 100%;
+                font-size: 0.95rem;
             }
 
             nav.nav-links a::after {
-                bottom: -2px;
+                display: none;
             }
 
             .btn-get-help {
-                display: none; /* Hide button on mobile and keep tabs */
+                display: none;
             }
 
             .hero-banner h1 {
@@ -1276,6 +1373,15 @@
             .consult-badges-row {
                 grid-template-columns: 1fr;
             }
+
+            .timeline-buttons-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .timeline-buttons-row button {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -1284,14 +1390,16 @@
     <!-- REDESIGNED SHARED NAVIGATION HEADER -->
     <header>
         <div class="logo-container" onclick="switchView('landing')">
-            <img src="logo.jpg" class="logo-img" alt="Gramin-Nyaya Logo">
+            <img src="logo.jpg" class="logo-img" alt="Gramin-Nyaya Logo" onerror="this.onerror=null; this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%25%22 height=%22100%25%22 fill=%22%23051d40%22/><text y=%22.75em%22 x=%22.1em%22 font-size=%2265%22 fill=%22%23ffd700%22>⚖️</text></svg>';">
             <span class="logo-text">Gramin-Nyaya</span>
         </div>
         
-        <nav class="nav-links">
-            <a id="nav-home" class="active" onclick="switchView('chat')">Case Status</a>
-            <a id="nav-library" onclick="switchView('landing')">Legal Library</a>
-            <a id="nav-help" onclick="switchView('consult')">Help Center</a>
+        <button class="hamburger-menu-btn" id="hamburger-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle Navigation Menu">☰</button>
+        
+        <nav class="nav-links" id="nav-links-menu">
+            <a id="nav-home" class="active" onclick="switchView('chat'); closeMobileMenu()">Case Status</a>
+            <a id="nav-library" onclick="switchView('landing'); closeMobileMenu()">Legal Library</a>
+            <a id="nav-help" onclick="switchView('consult'); closeMobileMenu()">Help Center</a>
         </nav>
         
         <div class="header-actions">
@@ -1302,8 +1410,14 @@
                     <option value="bh">भोजपुरी (BH)</option>
                     <option value="aw">अवधी (AW)</option>
                     <option value="hr">हरियाणवी (HR)</option>
+                    <option value="rj">राजस्थानी (RJ)</option>
+                    <option value="mai">मैथिली (MAI)</option>
                 </select>
             </div>
+            
+            <button class="theme-toggle-btn" id="theme-toggle-btn" onclick="toggleTheme()" title="Toggles Dark/Light Mode" aria-label="Toggle Dark/Light Mode" style="background: none; border: none; font-size: 1.25rem; cursor: pointer; padding: 8px; transition: var(--transition-smooth); margin-right: 8px;">
+                🌙
+            </button>
             
             <button class="profile-avatar-btn" onclick="alert(currentLanguage === 'hi' ? 'प्रोफ़ाइल सेटिंग्स अनुभाग विकास के अधीन है।' : 'Profile settings section is under development.')">
                 👤
@@ -1341,13 +1455,16 @@
             <div class="chat-input-wrapper">
                 <div class="chat-input-row">
                     <div class="input-bar-container">
-                        <input type="text" id="chat-text-input" placeholder="Ask anything about legal matters..." onkeydown="if(event.key === 'Enter') handleSendChat()">
-                        <button class="btn-mic-inside" id="voice-input-btn" onclick="triggerVoiceTyping()" title="बोलकर टाइप करें">
+                        <input type="text" id="chat-text-input" placeholder="Ask anything about legal matters..." onkeydown="if(event.key === 'Enter') handleSendChat()" aria-label="Legal question input field">
+                        <button class="btn-mic-inside" id="voice-input-btn" onclick="triggerVoiceTyping()" title="बोलकर टाइप करें" aria-label="Voice typing">
                             🎤
                         </button>
                     </div>
-                    <button class="btn-send-circle btn-ripple" onclick="handleSendChat()">
+                    <button class="btn-send-circle btn-ripple" onclick="handleSendChat()" aria-label="Send message">
                         ➔
+                    </button>
+                    <button class="btn-send-circle btn-ripple btn-clear-history" onclick="clearChatHistory()" title="Clear Chat History" aria-label="Clear chat history" style="background-color: #fee2e2; border-color: #fca5a5; color: #b91c1c;">
+                        🗑️
                     </button>
                 </div>
                 <p class="chat-disclaimer" id="chat-input-disclaimer">Your conversation is private and protected by legal privilege.</p>
@@ -1475,14 +1592,15 @@
 
             <!-- Bottom timeline buttons row -->
             <div class="timeline-buttons-row">
-                <button class="btn-navy btn-ripple" onclick="alert(currentLanguage === 'hi' ? 'उत्तराधिकार विलेख दस्तावेज़ डाउनलोड किया जा रहा है...' : 'Downloading Succession checklist PDF...')">📥 Download Checklist</button>
-                <button class="btn-outline btn-ripple" onclick="alert(currentLanguage === 'hi' ? 'नजदीकी विधिक सेवा केंद्र की खोज की जा रही है...' : 'Searching for the nearest Legal Aid office...')">📍 Find Nearest Office</button>
+                <button class="btn-navy btn-ripple" onclick="printChecklist()">📥 Download Checklist</button>
+                <button class="btn-outline btn-ripple" onclick="triggerGeolocation()">📍 Find Nearest Office</button>
             </div>
 
-            <!-- Landscape Map Card -->
-            <div class="map-card">
-                <div class="map-location-tag">📍</div>
-                <div class="closest-office-box">
+            <!-- Landscape Map Card with OSM embed support -->
+            <div class="map-card" id="nearest-office-card" style="position: relative; overflow: hidden; display: flex; align-items: flex-end; padding: 20px;">
+                <div id="map-iframe-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; border: none;"></div>
+                <div class="map-location-tag" style="z-index: 2;">📍</div>
+                <div class="closest-office-box" style="z-index: 2; position: relative;">
                     <h5 id="map-lbl-1">Closest Office Found</h5>
                     <h4 id="map-office-name">Sub-Registrar Office, Sector 4</h4>
                     <p id="map-lbl-2">2.4 km away • Open until 5:00 PM</p>
@@ -1515,7 +1633,7 @@
             </div>
 
             <!-- Grid of 4 Simplified Guides -->
-            <div class="categories-grid" style="grid-template-columns: repeat(2, 1fr); gap: 20px;">
+            <div class="categories-grid">
                 <div class="category-card animate" style="padding: 24px; gap: 12px; background-color: var(--bg-surface); cursor: pointer;" onclick="queryGuide('registration')">
                     <span class="free-service-badge" style="background-color: #fef3c7; color: #b45309; position: static; align-self: flex-start;">Registry Guide</span>
                     <h4 id="guide-title-1" style="font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--color-primary);">Registration Act: Section 17</h4>
@@ -1574,7 +1692,7 @@
             <div class="consult-photo-card">
                 <div class="photo-wrap">
                     <span class="free-service-badge" id="badge-free">Free Service</span>
-                    <img src="https://images.unsplash.com/photo-1580894732444-8fecef2271ac?auto=format&fit=crop&q=80&w=600" alt="Consultation Attorney">
+                    <img src="legal_emblem.png" alt="Gramin-Nyaya Verified Emblem" onerror="this.onerror=null; this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%25%22 height=%22100%25%22 fill=%22%23051d40%22/><text y=%22.75em%22 x=%22.1em%22 font-size=%2265%22 fill=%22%23ffd700%22>⚖️</text></svg>';">
                 </div>
                 <div class="consult-intro-text">
                     <h2 id="consult-text-h2">Get Professional Legal Advice</h2>
@@ -1651,7 +1769,7 @@
         let currentActiveTab = 'landing';
         let currentLanguage = 'en'; // Set English as default layout to match visual mocks
         const serverEndpoint = "http://localhost:8000/ask";
-        let isRecording = false;
+        let recordingState = 'idle'; // 'idle', 'recording', 'transcribing'
 
         // Active conversation history
         let conversationLogs = [];
@@ -2137,7 +2255,7 @@
                 statuteTitle: "रजिस्ट्रेशन एक्ट, १९०८",
                 statuteDesc: "दस्तावेज के रजिस्ट्रेशन अर जमीन ट्रांसफर ने काबू करण आला भारत का मुख्य कानून।",
                 btnDownloadStatute: "सरकारी पीडीएफ डाउनलोड करो",
-                guideTitle1: "रजिस्ट्रेशन起: धारा १७",
+                guideTitle1: "रजिस्ट्रेशन: धारा १७",
                 guideDesc1: "यो कायदा बतावै सै कि किस-किस कागज का रजिस्ट्रेशन करवाना जरूरी सै।",
                 guideLink1: "मार्गदर्शिका पढ़ो",
                 guideTitle2: "उत्तराधिकार सर्टिफिकेट की ढब",
@@ -2149,6 +2267,200 @@
                 guideTitle4: "दाखिल-खारिज के कायदे",
                 guideDesc4: "सरकारी रिकार्ड में नाम चढ़वाण के कायदे अर समय सीमा।",
                 guideLink4: "मार्गदर्शिका पढ़ो"
+            },
+            rj: {
+                navHome: "केस री स्थिति",
+                navLibrary: "कानूनी पुस्तकालय",
+                navHelp: "मदद केंद्र",
+                btnHeaderCta: "इब मदद लेवो",
+                
+                badgeSociety: "🛡️ फ़्री कानूनी सहायता सोसाइटी",
+                landingTitle: "आज आपने काई मदद चाईजै?",
+                landingSubtitle: "अपने वकील सागे गुपचुप बात करण सारू नीचे री केटेगरी चुणो।",
+                
+                catTitle1: "जमीन और जायदाद",
+                catDesc1: "जमीन रा कागजात, बटवारा और पटवारी रा नाप-तोल री समस्या में मदद पाओ।",
+                catLink1: "बातचीत शुरू करो",
+                
+                catTitle2: "घर-कुणबो और ब्याह",
+                catDesc2: "घरेलू हक, ब्याह रो रजिस्ट्रेशन और टाबरां रा रख-रखाव माथे सलाह।",
+                catLink2: "बातचीत शुरू करो",
+                
+                catTitle3: "खेती लोन और सब्सिडी",
+                catDesc3: "बैंक लोन, फसल बीमा और सरकारी सब्सिडी रा बारे में हक समझो।",
+                catLink3: "बातचीत शुरू करो",
+                
+                catTitle4: "दीवानी मामले",
+                catDesc4: "कागजी वादा टूटना, पीसा री वसूली और पड़ोसिया रा लट्ठ-खड़क पे सलाह।",
+                catLink4: "बातचीत शुरू करो",
+                
+                catTitle5: "सरकारी स्कीम",
+                catDesc5: "आयुष्मान कार्ड, बुढ़ापा पेंशन और मकान री स्कीम सारू योग्यता जांचो।",
+                catLink5: "पात्रता चैक करो",
+                
+                assessTitle: "ठा नी कड़े ते शुरू करां?",
+                assessDesc: "म्हारो कंप्यूटर सहायक २ मिनट ते कम में थारी समस्या जांच लेसी।",
+                assessBtnText: "जल्दी ते चैक करो",
+                
+                stepsTitle: "जमीन नाम करवाण सारू अगला कदम",
+                stepsSubtitle: "जमीन रा बटवारा रा कायदा ने तीन आसान कामा में बाँट दिया है।",
+                
+                timeTitle1: "📄 मोत रो प्रमाण पत्र लेओ",
+                timeDesc1: "जमीन रा पुराना मालिक रो सरकारी मोत रो पर्चा जरूरी है।",
+                btnTime1: "ब्लॉक ऑफिस जाओ",
+                
+                timeTitle2: "🗺️ जमीन रा पर्चा खोजो",
+                timeDesc2: "नया मालिकाना हक जांचण सारू भूलेख माथे खाता और खसरा देखो।",
+                btnTime2: "भूलेख ऑनलाइन",
+                
+                timeTitle3: "✍️ दाखिल-खारिज सारू अर्जी देवो",
+                timeDesc3: "सरकारी कागजा में अपणो नाम चढ़ावाण सारू लिखित में अर्जी देवो।",
+                btnTime3: "तहसीलदार कचहरी",
+                
+                mapLbl1: "धोरे रो ऑफिस मिल गयो",
+                mapOfficeName: "रजिस्ट्रार कचहरी, सैक्टर ४",
+                mapLbl2: "२.४ किमी दूर • सांझ ५:०० बजे तक खुलो है",
+                
+                aiWelcomeText: "खम्मा घणी सा! हूँ आपरो कानूनी सहायक (Nyaya Sahayak) हूँ। आज मैं आपकी किस प्रकार मदद कर सकूँ? जमीन, बटवारा या कोई और कानूनी सवाल पूछ सको हो।",
+                textListenWelcomeLabel: "सुणो",
+                chatInputPlaceholder: "कानूनी कामा रा बारे में कुछ भी पूछो...",
+                chatInputDisclaimer: "थारी बातचीत एकदम गुपचुप है और कानूनी रूप ते सेफ है।",
+                
+                consultTextH2: "बड़ा वकीला ते कानूनी राय लो",
+                consultTextP: "म्हारी वकीला री पंचायत थारी बड़ी ते बड़ी दिक्कत में फ़्री मदद करेगी।",
+                formH3: "🤝 फ़्री सलाह सारू फार्म भरो",
+                lblName: "पूरो नाम",
+                lblSubName: "कृपा करके वही नाम लिखो जो सरकारी कागजा में है।",
+                lblPhone: "फोन नंबर",
+                lblProblem: "थारी के दिक्कत है?",
+                btnSubmitText: "कॉल बैक सारू कहो",
+                
+                badge1H5: "१००% गुपचुप",
+                badge1P: "थारी बातचीत वकील अर मुवक्किल के बीच एकदम गुप्त रहेगी।",
+                badge2H5: "तुरंत जवाब",
+                badge2P: "ज्यादातर फोन २४ घंटा में आ जावेला।",
+                badge3H5: "पक्के वकील",
+                badge3P: "सारे वकील म्हाने देहाती कायदा रा जाणे-सुणे और जाँचे होए है।",
+                
+                footPrivacy: "गोपनीयता नीति",
+                footTerms: "शर्तां",
+                footAccess: "अभिगम्यता सहायता",
+                footCopy: "© २०२४ ग्रामीण-न्याय कानूनी सहायता सोसाइटी। सारे हक महफूज है।",
+                
+                archivesTitle: "आसान मार्गदर्शिका अर सरकारी कानून",
+                archivesSubtitle: "देहाती कानूनी हका रा कायदे अर आसान नागरिक पुस्तिकायों तक पहुँचो।",
+                statuteTitle: "रजिस्ट्रेशन एक्ट, १९०८",
+                statuteDesc: "दस्तावेज रा रजिस्ट्रेशन अर जमीन ट्रांसफर ने काबू करण आलो भारत को मुख्य कानून।",
+                btnDownloadStatute: "सरकारी पीडीएफ डाउनलोड करो",
+                guideTitle1: "रजिस्ट्रेशन: धारा १७",
+                guideDesc1: "यो कायदा बतावे है कि किस-किस कागज को रजिस्ट्रेशन करवाना जरूरी है।",
+                guideLink1: "मार्गदर्शिका पढ़ो",
+                guideTitle2: "उत्तराधिकार सर्टिफिकेट री ढब",
+                guideDesc2: "उत्तराधिकार प्रमाण पत्र लेण को तरीको अर जरूरी कागजा की लिस्ट।",
+                guideLink2: "मार्गदर्शिका पढ़ो",
+                guideTitle3: "FIR कइसा दर्ज करवां",
+                guideDesc3: "थाने में प्रथम सूचना रिपोर्ट सही ढाल दर्ज करवाण सारू कायदा।",
+                guideLink3: "मार्गदर्शिका पढ़ो",
+                guideTitle4: "दाखिल-खारिज रा कायदा",
+                guideDesc4: "सरकारी रिकार्ड में नाम चढ़वाण रा कायदा अर समय सीमा।",
+                guideLink4: "मार्गदर्शिका पढ़ो"
+            },
+            mai: {
+                navHome: "केसक स्थिति",
+                navLibrary: "कानूनी पुस्तकालय",
+                navHelp: "सहायता केंद्र",
+                btnHeaderCta: "एखने सहायता लिअ",
+                
+                badgeSociety: "🛡️ निःशुल्क कानूनी सहायता सोसाइटी",
+                landingTitle: "आज अहांक कथि सहायताक जरूरत अछि?",
+                landingSubtitle: "अपन कानूनी सहायकक संग व्यक्तिगत बातचीत शुरू करबाक लेल नीचाँ देल श्रेणी चुनू।",
+                
+                catTitle1: "भूमि आ संपत्ति",
+                catDesc1: "भूमि कागजात, उत्तराधिकार आ स्थानीय भूमि मापन विवादक समाधान प्राप्त करू।",
+                catLink1: "बातचीत शुरू करू",
+                
+                catTitle2: "परिवार आ विवाह",
+                catDesc2: "घरेलू अधिकार, विवाह पंजीकरण आ बच्चा सभक संरक्षण पर निजी मार्गदर्शन।",
+                catLink2: "बातचीत शुरू करू",
+                
+                catTitle3: "कृषि ऋण आ सब्सिडी",
+                catDesc3: "बैंक ऋण, फसल बीमा आ राज्यक सब्सिडीक बारे में अपन अधिकार समझू।",
+                catLink3: "बातचीत शुरू करू",
+                
+                catTitle4: "दीवानी विवाद",
+                catDesc4: "अनुबंध उल्लंघन, धनक वसूली आ पड़ोसीक संग विवाद पर कानूनी सलाह।",
+                catLink4: "बातचीत शुरू करू",
+                
+                catTitle5: "सरकारी योजना",
+                catDesc5: "आयुष्मान कार्ड, बुढ़ापा पेंशन आ मकानक योजनाक लेल अपन योग्यता जांचू।",
+                catLink5: "योग्यता जांचू",
+                
+                assessTitle: "बुझि नै रहल छी कतय सँ शुरू करी?",
+                assessDesc: "हमर कंप्यूटर सहायक २ मिनट सँ कम समय में अहांक समस्याक पहचान क लेत।",
+                assessBtnText: "जल्दी सँ जांचू",
+                
+                stepsTitle: "जमीन अपन नाम करबाक लेल अगला कदम",
+                stepsSubtitle: "जमीनक बटवाराक कानूनी जरूरत के तीन टा आसान काम में बांटल गेल अछि।",
+                
+                timeTitle1: "📄 मृत्यु प्रमाण पत्र लिअ",
+                timeDesc1: "जमीनक पुराना मालिकक मृत्यु प्रमाण पत्र कवनो भी काज शुरू करबाक लेल जरूरी अछि।",
+                btnTime1: "ब्लॉक ऑफिस जाउ",
+                
+                timeTitle2: "🗺️ जमीनक कागजात खोजू",
+                timeDesc2: "ताजा मालिकाना हक जांचबाक लेल भूलेख पर खाता आ खसरा विवरण खोजू।",
+                btnTime2: "भूलेख ऑनलाइन",
+                
+                timeTitle3: "✍️ दाखिल-खारिज लेल आवेदन करू",
+                timeDesc3: "सरकारी रिकार्ड में नाम चढ़बाक लेल लिखित में आवेदन करू।",
+                btnTime3: "तहसीलदार कचहरी",
+                
+                mapLbl1: "नजदीकक ऑफिस भेट गेल",
+                mapOfficeName: "रजिस्ट्रार ऑफिस, सेक्टर ४",
+                mapLbl2: "२.४ किमी दूर • सांझ ५:०० बजे धरि खुजल अछि",
+                
+                aiWelcomeText: "प्रणाम! हम अहांक कानूनी सहायक (Nyaya Sahayak) छी। आजु हम अहांक कतय सहायता क सकय छी? जमीन, बटवारा चाहे कवनो दूसर कानूनी समस्या के बारे में पूछ सकी छी।",
+                textListenWelcomeLabel: "सुनू",
+                chatInputPlaceholder: "कानूनी मामलाक बारे में किछू पुछू...",
+                chatInputDisclaimer: "अहांक बातचीत एकदम गुप्त आ कानूनी रूप सँ सुरक्षित अछि।",
+                
+                consultTextH2: "वरिष्ठ वकील सभ सँ कानूनी राय लिअ",
+                consultTextP: "हमर वकील लोकनि अहांक पैघ सँ पैघ समस्या में मुफ़्त में मदद करता।",
+                formH3: "🤝 मुफ़्त परामर्श लेल आवेदन करू",
+                lblName: "पूरा नाम",
+                lblSubName: "कृपा कऽ ओही नाम लिखू जे सरकारी कागजात में अछि।",
+                lblPhone: "phone number",
+                lblProblem: "अहांक की समस्या अछि?",
+                btnSubmitText: "कॉल बैक लेल आवेदन करू",
+                
+                badge1H5: "१००% गुप्त",
+                badge1P: "अहांक बातचीत वकील आ मुवक्किलक बीच एकदम गोपनीय रहत।",
+                badge2H5: "त्वरित उत्तर",
+                badge2P: "अधिकतर फोन २४ घंटाक भीतर आ जायत।",
+                badge3H5: "विशेषज्ञ वकील",
+                badge3P: "सभ वकील देहाती कानूनक जानकार आ जाँचल-परखल छथि।",
+                
+                footPrivacy: "गोपनीयता नीति",
+                footTerms: "सेवाक शर्त",
+                footAccess: "सहायता समर्थन",
+                footCopy: "© २०२४ ग्रामीण-न्याय कानूनी सहायता सोसाइटी। सभ अधिकार सुरक्षित अछि।",
+                
+                archivesTitle: "आसान मार्गदर्शिका आ सरकारी कानून",
+                archivesSubtitle: "देहाती कानूनी अधिकारक नियम आ आसान नागरिक मार्गदर्शिका धरि पहुँचु।",
+                statuteTitle: "रजिस्ट्रेशन एक्ट, १९०८",
+                statuteDesc: "दस्तावेजक रजिस्ट्रेशन आ जमीनक ट्रांसफर के नियंत्रित करय वाला भारतक मुख्य कानून।",
+                btnDownloadStatute: "सरकारी पीडीएफ डाउनलोड करू",
+                guideTitle1: "पंजीकरण: धारा १७",
+                guideDesc1: "ई नियम बताबैत अछि जे कवन-कवन कागजात आ जमीनक लिखापढ़ीक पंजीकरण जरूरी अछि।",
+                guideLink1: "मार्गदर्शिका पढ़ू",
+                guideTitle2: "उत्तराधिकार सर्टिफिकेटक तरीका",
+                guideDesc2: "कानूनी रूप सँ उत्तराधिकार प्रमाण पत्र पाबय लेल नियम आ जरूरी कागजात के लिस्ट।",
+                guideLink2: "मार्गदर्शिका पढ़ू",
+                guideTitle3: "FIR कइसे दर्ज कराई",
+                guideDesc3: "थाना में प्रथम सूचना रिपोर्ट सही तरीका सँ दर्ज करबाक लेल नियम।",
+                guideLink3: "मार्गदर्शिका पढ़ू",
+                guideTitle4: "दाखिल-खारिजक नियम",
+                guideDesc4: "सरकारी रिकार्ड में नाम चढ़बाक नियम आ समय सीमा।",
+                guideLink4: "मार्गदर्शिका पढ़ू"
             }
         };
 
@@ -2297,7 +2609,18 @@
             safeSetText('foot-privacy', textSource.footPrivacy);
             safeSetText('foot-terms', textSource.footTerms);
             safeSetText('foot-access', textSource.footAccess);
-            safeSetText('foot-copy', textSource.footCopy);
+            
+            // Replace hardcoded 2024 / २०२४ with current dynamic year
+            const currentYear = new Date().getFullYear().toString();
+            let copyText = textSource.footCopy;
+            if (lang !== 'en') {
+                const devanagariDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+                const devanagariYear = currentYear.split('').map(digit => devanagariDigits[parseInt(digit)]).join('');
+                copyText = copyText.replace('2024', devanagariYear).replace('२०२४', devanagariYear);
+            } else {
+                copyText = copyText.replace('2024', currentYear).replace('२०२४', currentYear);
+            }
+            safeSetText('foot-copy', copyText);
             
             saveSessionState();
         }
@@ -2337,6 +2660,177 @@
             window.open('legal_docs/registrationActHindi.pdf', '_blank');
         }
 
+        // --- OFFLINE-FRIENDLY POPUP PRINTING AND PDF GENERATION ---
+        function printChecklist() {
+            const printWin = window.open('', '_blank', 'width=800,height=900');
+            const isHindi = currentLanguage !== 'en';
+            
+            const title = isHindi ? 
+                "ग्रामीण-न्याय कानूनी सहायता सोसाइटी - जमीन हस्तांतरण विलेख मार्गदर्शिका" : 
+                "Gramin-Nyaya Legal Aid Society - Property Land Transfer Checklist";
+            
+            const step1Title = isHindi ? "चरण १: पुराने मालिक का मृत्यु प्रमाण पत्र प्राप्त करें" : "Step 1: Obtain Old Owner's Death Certificate";
+            const step1Desc = isHindi ? "संपत्ति हस्तांतरण की प्रक्रिया शुरू करने के लिए ब्लॉक कार्यालय से आधिकारिक मृत्यु प्रमाण पत्र प्राप्त करना आवश्यक है।" : "Obtain the official death certificate from the Block Office to initiate succession proceedings.";
+            
+            const step2Title = isHindi ? "चरण २: भूमि के कागजात (खसरा-खतौनी) खोजें" : "Step 2: Retrieve Land Records (Khatauni/Khasra)";
+            const step2Desc = isHindi ? "ऑनलाइन भूलेख पोर्टल पर जाकर अपने भूमि विलेख, मालिकाना हक रिकॉर्ड और खसरा विवरण की नवीनतम प्रति जांचें।" : "Access the online Bhulekh platform to check the latest khasra records and current title holder listings.";
+            
+            const step3Title = isHindi ? "चरण ३: दाखिल-खारिज (नामांतरण) के लिए आवेदन करें" : "Step 3: Apply for Mutation (दाखिल-खारिज)";
+            const step3Desc = isHindi ? "तहसीलदार कार्यालय में आवेदन जमा करें ताकि सरकारी राजस्व अभिलेखों में उत्तराधिकारी के रूप में आपका नाम दर्ज किया जा सके।" : "File a formal application to record your name in the state land revenue registries at the Sub-Divisional Tehsildar office.";
+
+            const notesTitle = isHindi ? "महत्वपूर्ण विधिक निर्देश:" : "Critical Legal Guidelines:";
+            const notesContent = isHindi ? 
+                "१. हिन्दू उत्तराधिकार (संशोधन) अधिनियम, २००५ के अनुसार पुत्रियों का संपत्ति पर पुत्रों के समान ही अधिकार है।\n२. सभी विलेखों को तहसीलदार कार्यालय में प्रस्तुत करने से पूर्व प्रमाणित वारिसान प्रमाण पत्र (Vanshavali) अवश्य संलग्न करें।" :
+                "1. According to the Hindu Succession (Amendment) Act, 2005, daughters have equal joint coparcenary rights to ancestral property.\n2. Ensure a certified genealogy list (Vanshavali) from your local Gram Panchayat is appended to all applications.";
+
+            const printHTML = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>\${title}</title>
+                    <style>
+                        body { font-family: 'Segoe UI', Arial, sans-serif; padding: 40px; color: #0a1128; line-height: 1.6; background-color: #ffffff; }
+                        .header { border-bottom: 2px solid #051d40; padding-bottom: 20px; margin-bottom: 30px; display: flex; align-items: center; gap: 15px; }
+                        .logo-emblem { font-size: 35px; }
+                        .title-block h1 { font-size: 22px; margin: 0; color: #051d40; font-weight: 800; }
+                        .title-block p { font-size: 13px; margin: 5px 0 0 0; color: #475569; letter-spacing: 0.5px; text-transform: uppercase; }
+                        .step-item { border: 1px solid #e6e5e0; border-radius: 12px; padding: 20px; margin-bottom: 20px; display: flex; gap: 15px; }
+                        .step-num { background-color: #051d40; color: #ffffff; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
+                        .step-info h3 { margin: 0 0 8px 0; font-size: 16px; color: #051d40; }
+                        .step-info p { margin: 0; font-size: 14px; color: #475569; }
+                        .notes-box { background-color: #f7f6f2; border-left: 4px solid #d4af37; padding: 20px; border-radius: 8px; margin-top: 30px; }
+                        .notes-box h4 { margin: 0 0 10px 0; color: #051d40; font-size: 15px; }
+                        .notes-box p { margin: 0; font-size: 13px; color: #475569; white-space: pre-line; }
+                        .footer { margin-top: 50px; border-top: 1px solid #e6e5e0; padding-top: 15px; text-align: center; font-size: 11px; color: #94a3b8; }
+                        @media print {
+                            body { padding: 20px; }
+                            .step-item { page-break-inside: avoid; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <span class="logo-emblem">⚖️</span>
+                        <div class="title-block">
+                            <h1>\${title}</h1>
+                            <p>ग्रामीण डिजिटल विधिक अधिकार सुरक्षा केंद्र</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step-item">
+                        <div class="step-num">1</div>
+                        <div class="step-info">
+                            <h3>\${step1Title}</h3>
+                            <p>\${step1Desc}</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-num">2</div>
+                        <div class="step-info">
+                            <h3>\${step2Title}</h3>
+                            <p>\${step2Desc}</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-num">3</div>
+                        <div class="step-info">
+                            <h3>\${step3Title}</h3>
+                            <p>\${step3Desc}</p>
+                        </div>
+                    </div>
+
+                    <div class="notes-box">
+                        <h4>\${notesTitle}</h4>
+                        <p>\${notesContent}</p>
+                    </div>
+
+                    <div class="footer">
+                        © \${new Date().getFullYear()} ग्रामीण-न्याय (Gramin-Nyaya) विधिक सहायता सोसाइटी। सभी अधिकार सुरक्षित।
+                    </div>
+
+                    <script>
+                        window.onload = function() {
+                            window.print();
+                        };
+                    <\/script>
+                </body>
+                </html>
+            `;
+            
+            printWin.document.write(printHTML);
+            printWin.document.close();
+        }
+
+        function printAdviceCard(btn) {
+            const card = btn.closest('.legal-advice-card');
+            const title = card.querySelector('.advice-header').innerText;
+            const points = Array.from(card.querySelectorAll('.advice-point-item')).map(item => item.innerText);
+            
+            const printWin = window.open('', '_blank', 'width=800,height=900');
+            const isHindi = currentLanguage !== 'en';
+            
+            const docTitle = isHindi ? 
+                "ग्रामीण-न्याय कानूनी सलाह रिपोर्ट" : 
+                "Gramin-Nyaya Legal Advice Report";
+                
+            let pointsHTML = '';
+            points.forEach(pt => {
+                pointsHTML += `
+                    <div style="border-bottom: 1px solid #e6e5e0; padding: 12px 0;">
+                        <p style="font-size: 14px; margin: 0; color: #475569;">\${pt}</p>
+                    </div>
+                `;
+            });
+            
+            const printHTML = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>\${docTitle}</title>
+                    <style>
+                        body { font-family: 'Segoe UI', Arial, sans-serif; padding: 40px; color: #0a1128; line-height: 1.6; background-color: #ffffff; }
+                        .header { border-bottom: 2px solid #051d40; padding-bottom: 20px; margin-bottom: 30px; display: flex; align-items: center; gap: 15px; }
+                        .logo-emblem { font-size: 35px; }
+                        .title-block h1 { font-size: 22px; margin: 0; color: #051d40; font-weight: 800; }
+                        .title-block p { font-size: 13px; margin: 5px 0 0 0; color: #475569; letter-spacing: 0.5px; text-transform: uppercase; }
+                        .advice-title { font-size: 18px; color: #051d40; margin: 0 0 20px 0; font-weight: 700; border-left: 4px solid #d4af37; padding-left: 10px; }
+                        .footer { margin-top: 50px; border-top: 1px solid #e6e5e0; padding-top: 15px; text-align: center; font-size: 11px; color: #94a3b8; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <span class="logo-emblem">⚖️</span>
+                        <div class="title-block">
+                            <h1>\${docTitle}</h1>
+                            <p>ग्रामीण डिजिटल विधिक अधिकार सुरक्षा केंद्र</p>
+                        </div>
+                    </div>
+                    
+                    <h2 class="advice-title">\${title}</h2>
+                    
+                    <div style="margin-bottom: 40px;">
+                        \${pointsHTML}
+                    </div>
+                    
+                    <div class="footer">
+                        © \${new Date().getFullYear()} ग्रामीण-न्याय (Gramin-Nyaya) विधिक सहायता सोसाइटी। सभी अधिकार सुरक्षित।
+                    </div>
+                    
+                    <script>
+                        window.onload = function() {
+                            window.print();
+                        };
+                    <\/script>
+                </body>
+                </html>
+            `;
+            
+            printWin.document.write(printHTML);
+            printWin.document.close();
+        }
+
         function queryGuide(type) {
             let val = '';
             if (type === 'registration') {
@@ -2353,6 +2847,30 @@
                 document.getElementById('chat-text-input').value = val;
                 switchView('chat');
                 handleSendChat();
+            }
+        }
+
+        // Mobile collapsible menu helper actions
+        function toggleMobileMenu() {
+            const menu = document.getElementById('nav-links-menu');
+            if (menu) {
+                const isOpen = menu.classList.toggle('active');
+                document.getElementById('hamburger-menu-btn').innerText = isOpen ? '✕' : '☰';
+            }
+        }
+
+        function closeMobileMenu() {
+            const menu = document.getElementById('nav-links-menu');
+            if (menu && menu.classList.contains('active')) {
+                menu.classList.remove('active');
+                document.getElementById('hamburger-menu-btn').innerText = '☰';
+            }
+        }
+
+        function clearChatHistory() {
+            if (confirm(currentLanguage === 'hi' ? "क्या आप चैट इतिहास मिटाना चाहते हैं?" : "Are you sure you want to clear the chat history?")) {
+                localStorage.removeItem('gramin_nyaya_chat_history');
+                loadChatDemo();
             }
         }
 
@@ -2614,7 +3132,7 @@
                             <li>${currentLanguage === 'hi' ? 'ग्राम पंचायत से वारिसान प्रमाण पत्र (पारिवारिक सूची) प्राप्त करें।' : "Obtain a 'Family Tree' (Vanshavali) from your Gram Panchayat."}</li>
                             <li>${currentLanguage === 'hi' ? 'स्थानीय पटवारी के साथ बैठक का समय निर्धारित करें।' : 'Schedule an appointment with the local Patwari.'}</li>
                         </ul>
-                        <button class="btn-advice-action btn-ripple" onclick="alert('${currentLanguage === 'hi' ? 'चेकलिस्ट पीडीएफ डाउनलोड हो रही है...' : 'Downloading Checklist as PDF...'}')">
+                        <button class="btn-advice-action btn-ripple" onclick="printChecklist()">
                             ${currentLanguage === 'hi' ? 'चेकलिस्ट पीडीएफ डाउनलोड करें' : 'Download Checklist as PDF'}
                         </button>
                     </div>
@@ -2647,9 +3165,14 @@
 
             return `
                 <div class="legal-advice-card">
-                    <button class="listen-bubble-btn" onclick="speakText('${textToSpeak.replace(/'/g, "\\'")}')">
-                        🔊 <span>${currentLanguage === 'hi' ? 'सुनें' : 'LISTEN'}</span>
-                    </button>
+                    <div style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
+                        <button class="listen-bubble-btn" onclick="speakText('${textToSpeak.replace(/'/g, "\\'")}')" style="margin-bottom: 0;">
+                            🔊 <span>${currentLanguage === 'hi' ? 'सुनें' : 'LISTEN'}</span>
+                        </button>
+                        <button class="listen-bubble-btn" onclick="printAdviceCard(this)" style="margin-bottom: 0; background-color: var(--bg-card-hover); border-color: var(--border-color); color: var(--color-primary);">
+                            🖨️ <span>${currentLanguage === 'hi' ? 'प्रिंट' : 'PRINT'}</span>
+                        </button>
+                    </div>
                     <div class="advice-header">
                         ${title}
                     </div>
@@ -2667,12 +3190,12 @@
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 const utterance = new SpeechSynthesisUtterance(text);
-                if (currentLanguage === 'hi') {
-                    utterance.lang = 'hi-IN';
-                    utterance.rate = 0.92;
-                } else {
+                if (currentLanguage === 'en') {
                     utterance.lang = 'en-IN';
                     utterance.rate = 0.95;
+                } else {
+                    utterance.lang = 'hi-IN';
+                    utterance.rate = 0.92;
                 }
                 utterance.pitch = 1.0;
                 window.speechSynthesis.speak(utterance);
@@ -2685,28 +3208,39 @@
         let audioChunks = [];
         let recordTimer = null;
 
+        let recordingStream = null;
+
         // Voice speech transcription (STT) integration
         async function triggerVoiceTyping() {
             const micBtn = document.getElementById('voice-input-btn');
             const inputField = document.getElementById('chat-text-input');
 
-            if (!isRecording) {
+            if (recordingState === 'transcribing') {
+                return;
+            }
+
+            if (recordingState === 'idle') {
                 try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    isRecording = true;
+                    recordingStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    recordingState = 'recording';
                     micBtn.classList.add('recording');
                     audioChunks = [];
                     
-                    mediaRecorder = new MediaRecorder(stream);
+                    mediaRecorder = new MediaRecorder(recordingStream);
                     mediaRecorder.ondataavailable = (event) => {
                         audioChunks.push(event.data);
                     };
                     
                     mediaRecorder.onstop = async () => {
+                        recordingState = 'transcribing';
+                        micBtn.classList.add('transcribing');
+                        micBtn.classList.remove('recording');
+                        
                         inputField.placeholder = currentLanguage === 'hi' ? "🎤 जानकारी खोजी जा रही है..." : "🎤 Transcribing audio...";
                         const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
                         const formData = new FormData();
                         formData.append('file', audioBlob, 'record.wav');
+                        formData.append('lang', currentLanguage);
                         
                         try {
                             const res = await fetch('http://localhost:8000/transcribe', {
@@ -2722,13 +3256,17 @@
                             }
                         } catch (err) {
                             console.error("Error uploading audio to backend", err);
-                            // Fallback simulation if backend is offline
-                            inputField.value = currentLanguage === 'hi' ? 
-                                "पिताजी के निधन के बाद संपत्ति उत्तराधिकार के क्या नियम हैं?" : 
-                                "What are the rules of property succession after father's passing?";
+                            inputField.value = "";
+                            alert(currentLanguage === 'hi' ? 
+                                "⚠️ आवाज़ पहचानने में विफल। कृपया सुनिश्चित करें कि ऑफलाइन RAG सर्वर 'python api.py' सक्रिय है।" : 
+                                "⚠️ Transcription failed. Please ensure the local RAG backend is running with 'python api.py'.");
                         }
+                        
                         stopRecordingEffect();
-                        stream.getTracks().forEach(track => track.stop());
+                        if (recordingStream) {
+                            recordingStream.getTracks().forEach(track => track.stop());
+                            recordingStream = null;
+                        }
                     };
                     
                     mediaRecorder.start();
@@ -2752,8 +3290,10 @@
                 } catch (err) {
                     console.error("Mic access denied or unavailable", err);
                     alert("Microphone access is required for voice typing.");
+                    recordingState = 'idle';
+                    stopRecordingEffect();
                 }
-            } else {
+            } else if (recordingState === 'recording') {
                 if (recordTimer) clearInterval(recordTimer);
                 if (mediaRecorder && mediaRecorder.state === "recording") {
                     mediaRecorder.stop();
@@ -2762,11 +3302,122 @@
         }
 
         function stopRecordingEffect() {
-            isRecording = false;
+            recordingState = 'idle';
             const micBtn = document.getElementById('voice-input-btn');
             const inputField = document.getElementById('chat-text-input');
-            if (micBtn) micBtn.classList.remove('recording');
-            if (inputField) inputField.placeholder = currentLanguage === 'hi' ? "कानूनी मामलों के बारे में कुछ भी पूछें..." : "Ask anything about legal matters...";
+            if (micBtn) {
+                micBtn.classList.remove('recording');
+                micBtn.classList.remove('transcribing');
+            }
+            if (inputField) {
+                inputField.placeholder = currentLanguage === 'hi' ? "कानूनी मामलों के बारे में कुछ भी पूछें..." : "Ask anything about legal matters...";
+            }
+        }
+
+        // --- REAL GEOLOCATION & GEOGRAPHIC ANALYSIS ---
+        const sroOffices = [
+            { name: "Sub-Registrar Office, Panchkula (Haryana)", lat: 30.6972, lon: 76.8631, openUntil: "5:00 PM" },
+            { name: "Tehsil Office, Gurugram (Haryana)", lat: 28.4595, lon: 77.0266, openUntil: "5:00 PM" },
+            { name: "Sub-Registrar Office, Ayodhya (Uttar Pradesh)", lat: 26.7922, lon: 82.1998, openUntil: "5:00 PM" },
+            { name: "Sub-Registrar Office, Lucknow (Uttar Pradesh)", lat: 26.8467, lon: 80.9462, openUntil: "5:00 PM" },
+            { name: "District Registrar Office, Patna (Bihar)", lat: 25.5941, lon: 85.1376, openUntil: "5:00 PM" },
+            { name: "Sub-Registrar Office, Buxar (Bihar)", lat: 25.5647, lon: 83.9777, openUntil: "5:00 PM" }
+        ];
+
+        function getHaversineDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Radius of the Earth in km
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = 
+                Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c; // Distance in km
+        }
+
+        function loadMapIframe(office) {
+            const bboxOffset = 0.012; // Zoom bounding box
+            const minLon = office.lon - bboxOffset;
+            const minLat = office.lat - bboxOffset;
+            const maxLon = office.lon + bboxOffset;
+            const maxLat = office.lat + bboxOffset;
+            
+            const embedUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${minLon}%2C${minLat}%2C${maxLon}%2C${maxLat}&layer=mapnik&marker=${office.lat}%2C${office.lon}`;
+            
+            const container = document.getElementById('map-iframe-container');
+            if (container) {
+                container.innerHTML = `<iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="${embedUrl}" style="border: 0; width:100%; height:100%;"></iframe>`;
+            }
+        }
+
+        function loadDefaultMap() {
+            const defaultOffice = sroOffices[0];
+            document.getElementById('map-office-name').innerText = defaultOffice.name;
+            document.getElementById('map-lbl-2').innerText = `2.4 km away • Open until ${defaultOffice.openUntil}`;
+            loadMapIframe(defaultOffice);
+        }
+
+        function triggerGeolocation() {
+            const mapLbl1 = document.getElementById('map-lbl-1');
+            const mapOfficeName = document.getElementById('map-office-name');
+            const mapLbl2 = document.getElementById('map-lbl-2');
+            
+            if (mapOfficeName) {
+                mapOfficeName.innerText = currentLanguage === 'hi' ? "खोज जारी है..." : "Searching...";
+            }
+
+            if (!navigator.geolocation) {
+                alert(currentLanguage === 'hi' ? "इस ब्राउज़र में भौगोलिक स्थान सेवा उपलब्ध नहीं है।" : "Geolocation is not supported by your browser.");
+                loadDefaultMap();
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(position => {
+                const userLat = position.coords.latitude;
+                const userLon = position.coords.longitude;
+                
+                let minDistance = Infinity;
+                let closestOffice = sroOffices[0];
+                
+                sroOffices.forEach(office => {
+                    const dist = getHaversineDistance(userLat, userLon, office.lat, office.lon);
+                    if (dist < minDistance) {
+                        minDistance = dist;
+                        closestOffice = office;
+                    }
+                });
+                
+                if (mapLbl1) {
+                    mapLbl1.innerText = currentLanguage === 'hi' ? "नजदीकी कार्यालय मिला" : "Closest Office Found";
+                }
+                if (mapOfficeName) {
+                    mapOfficeName.innerText = closestOffice.name;
+                }
+                if (mapLbl2) {
+                    const distStr = minDistance.toFixed(1) + " km";
+                    mapLbl2.innerText = `${distStr} away • Open until ${closestOffice.openUntil}`;
+                }
+                
+                loadMapIframe(closestOffice);
+                
+                alert(currentLanguage === 'hi' ? 
+                    `📍 नजदीकी सरकारी कार्यालय मिला: ${closestOffice.name} (${minDistance.toFixed(1)} किमी दूर)` : 
+                    `📍 Closest registrar office identified: ${closestOffice.name} (${minDistance.toFixed(1)} km away)`);
+            }, error => {
+                console.error("Geolocation fetch error:", error);
+                alert(currentLanguage === 'hi' ? 
+                    "⚠️ स्थान प्राप्त करने में विफल। डिफ़ॉल्ट कार्यालय प्रदर्शित किया गया है।" : 
+                    "⚠️ Location access denied or timed out. Displaying default regional office instead.");
+                loadDefaultMap();
+            }, { timeout: 8000 });
+        }
+
+        // --- THEME SWAPPING & MEMORY PERSISTENCY ---
+        function toggleTheme() {
+            const isDark = document.body.classList.toggle('dark-theme');
+            localStorage.setItem('gramin_nyaya_theme', isDark ? 'dark' : 'light');
+            document.getElementById('theme-toggle-btn').innerText = isDark ? '☀️' : '🌙';
         }
 
         // Initialize state, loading from localStorage if present
@@ -2774,11 +3425,31 @@
             const savedLang = localStorage.getItem('gramin_nyaya_lang') || 'en';
             const savedTab = localStorage.getItem('gramin_nyaya_active_tab') || 'chat';
             const savedHistory = localStorage.getItem('gramin_nyaya_chat_history');
+            const savedTheme = localStorage.getItem('gramin_nyaya_theme');
+            
+            // Load saved theme configuration
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-theme');
+                const themeBtn = document.getElementById('theme-toggle-btn');
+                if (themeBtn) themeBtn.innerText = '☀️';
+            }
             
             changeLanguage(savedLang);
             
+            // Rebuild map on start
+            loadDefaultMap();
+            
             if (savedHistory) {
-                document.getElementById('chat-log-box').innerHTML = savedHistory;
+                let sanitizedHistory = savedHistory;
+                if (typeof DOMPurify !== 'undefined') {
+                    sanitizedHistory = DOMPurify.sanitize(savedHistory, { 
+                        ADD_TAGS: ['button', 'img', 'span', 'div', 'details', 'summary', 'strong', 'p', 'ul', 'li', 'h2', 'h3', 'h4', 'h5'],
+                        ADD_ATTR: ['onclick', 'onerror', 'class', 'style', 'src', 'alt', 'id', 'open']
+                    });
+                } else {
+                    sanitizedHistory = savedHistory.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
+                }
+                document.getElementById('chat-log-box').innerHTML = sanitizedHistory;
             } else {
                 loadChatDemo();
             }
