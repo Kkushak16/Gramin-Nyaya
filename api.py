@@ -10,10 +10,14 @@ Year: 2024
 """
 
 import logging
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from rag_logic import ask_gramin_nyaya
+import os
+import json
+from datetime import datetime
+import stt_service
 
 # --- Setup Logging Infrastructure ---
 logging.basicConfig(
@@ -91,6 +95,76 @@ async def handle_query(request: QueryRequest):
             status_code=500,
             detail="विधिक परामर्श सेवा में तकनीकी समस्या आ रही है। कृपया सुनिश्चित करें कि Ollama स्थानीय रूप से चल रहा है।"
         )
+
+class ConsultationRequest(BaseModel):
+    name: str = Field(..., min_length=1)
+    phone: str = Field(..., min_length=10)
+    desc: str = Field(..., min_length=3)
+
+@app.post("/consultation")
+async def handle_consultation(request: ConsultationRequest):
+    logger.info(f"New consultation callback request received for name: {request.name}")
+    try:
+        data = {
+            "timestamp": datetime.now().isoformat(),
+            "name": request.name,
+            "phone": request.phone,
+            "description": request.desc
+        }
+        
+        file_path = "consultations.json"
+        
+        consultations = []
+        if os.path.exists(file_path):
+            try:
+                with open(file_path, "r", encoding="utf-8") as f:
+                    consultations = json.load(f)
+            except Exception as read_err:
+                logger.error(f"Error reading consultations.json, resetting: {read_err}")
+                consultations = []
+                
+        consultations.append(data)
+        
+        with open(file_path, "w", encoding="utf-8") as f:
+            json.dump(consultations, f, ensure_ascii=False, indent=4)
+            
+        logger.info("Successfully persisted consultation request.")
+        return {
+            "success": True,
+            "message": "Consultation request submitted successfully."
+        }
+    except Exception as e:
+        logger.error(f"Failed to record consultation request: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Failed to save request. Please try again.")
+
+@app.post("/transcribe")
+async def handle_transcription(file: UploadFile = File(...)):
+    logger.info("New audio file received for transcription.")
+    temp_filename = "uploaded_voice.wav"
+    try:
+        content = await file.read()
+        with open(temp_filename, "wb") as f:
+            f.write(content)
+            
+        logger.info(f"Successfully saved temp audio file. Proceeding with Whisper inference.")
+        
+        transcribed_text = stt_service.record_and_transcribe(file_path=temp_filename)
+        
+        logger.info(f"Transcription completed: '{transcribed_text}'")
+        
+        if os.path.exists(temp_filename):
+            os.remove(temp_filename)
+            
+        return {
+            "text": transcribed_text,
+            "success": True
+        }
+    except Exception as e:
+        logger.error(f"Error during audio transcription: {e}", exc_info=True)
+        if os.path.exists(temp_filename):
+            os.remove(temp_filename)
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 # --- Bootloader ---
 if __name__ == "__main__":

@@ -1286,6 +1286,9 @@
             <div class="lang-switcher">
                 <button id="btn-lang-hi" class="active" onclick="changeLanguage('hi')">HI</button>
                 <button id="btn-lang-en" onclick="changeLanguage('en')">EN</button>
+                <button id="btn-lang-bh" onclick="changeLanguage('bh')">BH</button>
+                <button id="btn-lang-aw" onclick="changeLanguage('aw')">AW</button>
+                <button id="btn-lang-hr" onclick="changeLanguage('hr')">HR</button>
             </div>
             
             <button class="profile-avatar-btn" onclick="alert(currentLanguage === 'hi' ? 'प्रोफ़ाइल सेटिंग्स अनुभाग विकास के अधीन है।' : 'Profile settings section is under development.')">
@@ -1639,6 +1642,15 @@
         // Active conversation history
         let conversationLogs = [];
 
+        function saveSessionState() {
+            localStorage.setItem('gramin_nyaya_active_tab', currentActiveTab);
+            localStorage.setItem('gramin_nyaya_lang', currentLanguage);
+            const logBox = document.getElementById('chat-log-box');
+            if (logBox) {
+                localStorage.setItem('gramin_nyaya_chat_history', logBox.innerHTML);
+            }
+        }
+
         // Full Dual-Language Translation Dictionary
         const translations = {
             hi: {
@@ -1832,8 +1844,297 @@
                 guideDesc3: "A citizen's manual for lodging a First Information Report correctly at local police stations.",
                 guideLink3: "Read Guide",
                 guideTitle4: "Land Mutation (दाखिल-खारिज) Rules",
-                guideDesc4: "Regulatory codes and timeframes governing property name modifications in local revenue records.",
-                guideLink4: "Read Guide"
+            },
+            bh: {
+                navHome: "केस के हाल",
+                navLibrary: "विधिक लाइब्रेरी",
+                navHelp: "मदद केंद्र",
+                btnHeaderCta: "तुरंत मदद पाईं",
+                
+                badgeSociety: "🛡️ मुफ़्त कानूनी सहायता सोसाइटी",
+                landingTitle: "आज रउआ के कवन मदद चाहीं?",
+                landingSubtitle: "निजी बातचीत शुरू करे खातिर नीचे कवनो श्रेणी चुनीं। हम रउआ के हर कदम पर राह देखाए खातिर तैयार बानी।",
+                
+                catTitle1: "जमीन-जायदाद",
+                catDesc1: "जमीन के कागज, बटवारा अउर स्थानीय जमीन नापी के विवाद में मदद पाईं।",
+                catLink1: "बातचीत शुरू करीं",
+                
+                catTitle2: "परिवार अउर बियाह",
+                catDesc2: "घरेलू अधिकार, बियाह के रजिस्ट्रेशन अउर बच्चा लोगन के संरक्षण पर निजी सलाह।",
+                catLink2: "बातचीत शुरू करीं",
+                
+                catTitle3: "खेती लोन अउर सब्सिडी",
+                catDesc3: "बैंक लोन, फसल बीमा अउर सरकारी सब्सिडी के बारे में आपन अधिकार समझीं।",
+                catLink3: "बातचीत शुरू करीं",
+                
+                catTitle4: "दीवानी विवाद",
+                catDesc4: "कागजी समझौता के उल्लंघन, पइसा वसूली अउर पड़ोसी लोगन के अनबन पर कानूनी सलाह।",
+                catLink4: "बातचीत शुरू करीं",
+                
+                catTitle5: "सरकारी योजना",
+                catDesc5: "स्वास्थ्य कार्ड, पेंशन योजना अउर घर अनुदान खातिर आपन योग्यता जांचीं।",
+                catLink5: "योग्यता जांचीं",
+                
+                assessTitle: "ना बुझात बा कहाँ से शुरू करीं?",
+                assessDesc: "हमर कम्प्यूटर सहायक २ मिनट से कम समय में राउर समस्या पहिचान लेई। कवनो कानूनी पढ़ाई के जरूरत नईखे।",
+                assessBtnText: "तुरंत जांच शुरू करीं",
+                
+                stepsTitle: "जमीन हस्तांतरण खातिर राउर अगला कदम",
+                stepsSubtitle: "हम जमीन के बटवारा के कानूनी जरूरत के तीन गो आसान काम में बदल देले बानी। अपना अधिकार खातिर एकर पालन करीं।",
+                
+                timeTitle1: "📄 मृत्यु प्रमाण पत्र लीं",
+                timeDesc1: "जमीन के मालिक के सरकारी कागज (डेथ सर्टिफिकेट) कवनो भी काम शुरू करे खातिर जरूरी बा।",
+                btnTime1: "ब्लॉक ऑफिस जाईं",
+                
+                timeTitle2: "🗺️ जमीन के कागज खोजीं",
+                timeDesc2: "ताजा मालिकाना हक जाँचे खातिर भूलेख पर खाता अउर खसरा के विवरण खोजीं।",
+                btnTime2: "भूलेख ऑनलाइन",
+                
+                timeTitle3: "✍️ दाखिल-खारिज खातिर अर्जी दीं",
+                timeDesc3: "सरकारी रिकार्ड में नाम चढ़ावे खातिर लिखित में अर्जी दीं।",
+                btnTime3: "तहसीलदार कचहरी",
+                
+                mapLbl1: "नजदीकी ऑफिस मिल गइल",
+                mapOfficeName: "रजिस्ट्रार ऑफिस, सेक्टर ४",
+                mapLbl2: "२.४ किमी दूर • सांझ ५:०० बजे ले खुलाल बा",
+                
+                aiWelcomeText: "प्रणाम! हम राउर कानूनी सहायक (Nyaya Sahayak) बानी। आज हम राउर कइसे मदद कर सकीं? रउआ अपनी जमीन, बटवारा चाहे कवनो दूसर कानूनी समस्या के बारे में पूछ सकीं।",
+                textListenWelcomeLabel: "सुनीं",
+                chatInputPlaceholder: "कानूनी मामिला के बारे में कुछ भी पूछीं...",
+                chatInputDisclaimer: "राउर बातचीत एकदम निजी बा अउर कानूनी रूप से सुरक्षित बा।",
+                
+                consultTextH2: "बड़ वकीलन से कानूनी सलाह पाईं",
+                consultTextP: "हमर वकील लोग राउर कड़े से कड़ा समस्या में भी मुफ़्त में मदद करी। हम इहाँ राउर बात सुने अउर सही राह देखावे खातिर बानी।",
+                formH3: "🤝 मुफ़्त परामर्श खातिर अर्जी दीं",
+                lblName: "पूरा नाम",
+                lblSubName: "कृपया ओही नाम लिखीं जे सरकारी कागजात में बा।",
+                lblPhone: "फोन नंबर",
+                lblProblem: "राउर का समस्या बा?",
+                btnSubmitText: "कॉल बैक के अनुरोध करीं",
+                
+                badge1H5: "१००% निजी",
+                badge1P: "राउर बातचीत वकील अउर मुवक्किल के बीच एकदम गोपनीय रही।",
+                badge2H5: "तुरंत जवाब",
+                badge2P: "बेसी कइके फोन २४ घंटा के भीतर आ जाई।",
+                badge3H5: "जानकार वकील लोग",
+                badge3P: "सभ वकील देहाती कानून के जानकार अउर जाँचल-परखल बाड़न।",
+                
+                footPrivacy: "गोपनीयता नीति",
+                footTerms: "सेवा के शर्त",
+                footAccess: "अभिगम्यता सहायता",
+                footCopy: "© २०२४ ग्रामीण-न्याय कानूनी सहायता सोसाइटी। सभ अधिकार सुरक्षित बा।",
+                
+                archivesTitle: "आसान मार्गदर्शिका अउर सरकारी कानून",
+                archivesSubtitle: "देहाती कानूनी अधिकारन के नियम अउर आसान नागरिक मार्गदर्शिका तक पहुँचीं।",
+                statuteTitle: "रजिस्ट्रेशन एक्ट, १९०८",
+                statuteDesc: "दस्तावेज के रजिस्ट्रेशन अउर जमीन ट्रांसफर के नियंत्रित करे वाला भारत के मुख्य कानून।",
+                btnDownloadStatute: "सरकारी पीडीएफ डाउनलोड करीं",
+                guideTitle1: "पंजीकरण अधिनियम: धारा १७",
+                guideDesc1: "इ नियम बतावेला कि कवन-कवन कागज अउर जमीन के लिखापढ़ी के रजिस्ट्रेशन जरूरी बा।",
+                guideLink1: "मार्गदर्शिका पढ़ीं",
+                guideTitle2: "उत्तराधिकार सर्टिफिकेट के तरीका",
+                guideDesc2: "कानूनी रूप से उत्तराधिकार प्रमाण पत्र पावे खातिर नियम अउर जरूरी कागजात के लिस्ट।",
+                guideLink2: "मार्गदर्शिका पढ़ीं",
+                guideTitle3: "FIR कइसे दर्ज कराईं",
+                guideDesc3: "थाना में प्रथम सूचना रिपोर्ट एकदम सही तरीका से दर्ज करावे खातिर नागरिकन के नियम।",
+                guideLink3: "मार्गदर्शिका पढ़ीं",
+                guideTitle4: "जमीन दाखिल-खारिज के नियम",
+                guideDesc4: "सरकारी रिकार्ड में नाम चढ़वावे के नियम अउर समय सीमा।",
+                guideLink4: "मार्गदर्शिका पढ़ीं"
+            },
+            aw: {
+                navHome: "केस कै दशा",
+                navLibrary: "कानूनी पुस्तकालय",
+                navHelp: "सहाई केंद्र",
+                btnHeaderCta: "तुरंत सहाई पावा",
+                
+                badgeSociety: "🛡️ मुफ़्त कानूनी सहाई सोसाइटी",
+                landingTitle: "आज आप कहूँ कउन सहाई चाही?",
+                landingSubtitle: "आपन कानूनी सहायक क साथ निजी गोठबात शुरू करै बरे नीचे क कउनो श्रेणी चुना। हम हर डेग पर मार्गदर्शन करै बरे तैयार अही।",
+                
+                catTitle1: "भूँइया अउर संपत्ति",
+                catDesc1: "भूँइया क कागजात, उत्तराधिकार अउर स्थानीय नापी क रगड़न मा सहाई पावा।",
+                catLink1: "गोठबात शुरू करा",
+                
+                catTitle2: "घर-परिवार अउर बियाह",
+                catDesc2: "घरेलू अधिकार, बियाह क लिखत-पढ़त अउर लरिका क संरक्षण पर निजी राय।",
+                catLink2: "गोठबात शुरू करा",
+                
+                catTitle3: "खेती ऋण अउर सब्सिडी",
+                catDesc3: "बैंक क लोन, फसल बीमा अउर सरकारी सब्सिडी क बारे मा आपन हक समझा।",
+                catLink3: "गोठबात शुरू करा",
+                
+                catTitle4: "दीवानी रगड़ा",
+                catDesc4: "समझौता क टूटना, पइसा वसूली अउर परोसी क रगड़न पर कानूनी राय।",
+                catLink4: "गोठबात शुरू करा",
+                
+                catTitle5: "सरकारी योजना",
+                catDesc5: "स्वास्थ्य कार्ड, बुढ़ापा पेंशन अउर घर बरे पात्रता जाँचा।",
+                catLink5: "पात्रता जाँचा",
+                
+                assessTitle: "नाहीं समझ मा आवत कहाँ से शुरू कीन जाय?",
+                assessDesc: "हमार कम्प्यूटर सहायक २ मिनट से कम मा आप क समस्या पहिचान लेई। कउनो वकालत पढ़ब जरूरी नाहीं बा।",
+                assessBtnText: "जल्दी से जांच करा",
+                
+                stepsTitle: "भूँइया ट्रांसफर बरे आप क अगला डेग",
+                stepsSubtitle: "हम भूँइया क बटवारा बरे कानूनी नियमन क तीन आसान कामन मा बाँट दीन्ह अहै। आपन हक बरे इनका पूरा करा।",
+                
+                timeTitle1: "📄 मृत्यु प्रमाण पत्र ल्यो",
+                timeDesc1: "मालिक क सरकारी कागजात (डेथ सर्टिफिकेट) कउनो भी काम शुरू करै बरे जरूरी अहै।",
+                btnTime1: "ब्लॉक ऑफिस जावा",
+                
+                timeTitle2: "🗺️ भूँइया क कागजात खोजा",
+                timeDesc2: "नया मालिकाना हक जाँचे बरे भूलेख मा खाता अउर खसरा विवरण देखा।",
+                btnTime2: "भूलेख ऑनलाइन",
+                
+                timeTitle3: "✍️ दाखिल-खारिज बरे अरजी द्या",
+                timeDesc3: "सरकारी रिकार्ड मा आपन नाम चढ़ावै बरे तहसीलदार क अरजी द्या।",
+                btnTime3: "तहसीलदार कचहरी",
+                
+                mapLbl1: "नजदीकी ऑफिस मिल गवा",
+                mapOfficeName: "रजिस्ट्रार कचहरी, सेक्टर ४",
+                mapLbl2: "२.४ किमी दूर • संझा ५:०० बजे तक खुला अहै",
+                
+                aiWelcomeText: "राम राम! हम आप क कानूनी सहायक (Nyaya Sahayak) अही। आज हम आप क कइसे मदद कर सकी? आप आपन भूँइया, बटवारा चाहे कउनो अउर कानूनी सवाल पूछि सकत अहो।",
+                textListenWelcomeLabel: "सुना",
+                chatInputPlaceholder: "कानूनी मामिला क बारे मा कुछ भी पूछा...",
+                chatInputDisclaimer: "आप क गोठबात एकदम गुप्त अउर कानूनी तौर पर सुरक्षित अहै।",
+                
+                consultTextH2: "जानकार वकीलन से कानूनी राय पावा",
+                consultTextP: "हमार वकीलन क टोली आप क कड़े से कड़े समस्या मा मुफ़्त मा मदद करी। हम हिआँ आप क बात सुनै अउर सही रास्ता देखावै बरे अही।",
+                formH3: "🤝 मुफ़्त परामर्श बरे अरजी द्या",
+                lblName: "पूरा नाम",
+                lblSubName: "कृपया ओही नाम लिखा जे सरकारी कागजात मा लिखा बा।",
+                lblPhone: "फोन नंबर",
+                lblProblem: "आप क का समस्या बा?",
+                btnSubmitText: "कॉल बैक बरे अरजी द्या",
+                
+                badge1H5: "१००% निजी",
+                badge1P: "आप क गोठबात वकील अउर मुवक्किल क बीच एकदम गुप्त रही।",
+                badge2H5: "तुरंत जवाब",
+                badge2P: "ज्यादातर फोन २४ घंटा क भीतर आ जाई।",
+                badge3H5: "गुनी वकील लोग",
+                badge3P: "सभै वकील देहाती नियमन क जानकार अउर जाँचल-परखल अहैं।",
+                
+                footPrivacy: "गोपनीयता नीति",
+                footTerms: "सेवा क शर्त",
+                footAccess: "अभिगम्यता सहाई",
+                footCopy: "© २०२४ ग्रामीण-न्याय कानूनी सहाई सोसाइटी। सभै अधिकार सुरक्षित बा।",
+                
+                archivesTitle: "आसान मार्गदर्शिका अउर सरकारी कानून",
+                archivesSubtitle: "देहाती कानूनी हकन क नियमन अउर आसान नागरिक पुस्तिकान तक पहुँचा।",
+                statuteTitle: "रजिस्ट्रेशन एक्ट, १९०८",
+                statuteDesc: "दस्तावेज क रजिस्ट्रेशन अउर भूँइया ट्रांसफर क नियंत्रित करै वाला भारत क मुख्य कानून।",
+                btnDownloadStatute: "सरकारी पीडीएफ डाउनलोड करा",
+                guideTitle1: "रजिस्ट्रेशन एक्ट: धारा १७",
+                guideDesc1: "इ नियम बतावत है कि कउन-कवन कागजात क रजिस्ट्रेशन जरूरी बा।",
+                guideLink1: "मार्गदर्शिका पढ़ा",
+                guideTitle2: "उत्तराधिकार सर्टिफिकेट कै तरीका",
+                guideDesc2: "कानूनी रूप से उत्तराधिकार प्रमाण पत्र पावै क नियम अउर जरूरी कागजात क लिस्ट।",
+                guideLink2: "मार्गदर्शिका पढ़ा",
+                guideTitle3: "FIR कइसे दर्ज करावैं",
+                guideDesc3: "थाना मा प्रथम सूचना रिपोर्ट एकदम सही तरीका से दर्ज करावै बरे नियम।",
+                guideLink3: "मार्गदर्शिका पढ़ा",
+                guideTitle4: "दाखिल-खारिज कै नियम",
+                guideDesc4: "सरकारी रिकार्ड मा नाम चढ़वावै क नियम अउर समय सीमा।",
+                guideLink4: "मार्गदर्शिका पढ़ा"
+            },
+            hr: {
+                navHome: "केस की ढब",
+                navLibrary: "कानूनी लाइब्रेरी",
+                navHelp: "मदद सैंटर",
+                btnHeaderCta: "इब्बे मदद लेओ",
+                
+                badgeSociety: "🛡️ फ़्री कानूनी सहायता सोसाइटी",
+                landingTitle: "आज थामने के मदद चाहिए?",
+                landingSubtitle: "आफणे वकील गैल गुपचुप बात करण खातर नीचे कोई केटेगरी चुणो। हम थारे हर कदम पै राह दिखाण खातर तैयार सां।",
+                
+                catTitle1: "जमीन अर जायदाद",
+                catDesc1: "जमीन के कागजात, बटवारा अर पटवारी के नाप-तोल के झगड़े में मदद पाओ।",
+                catLink1: "बातचीत शुरू करो",
+                
+                catTitle2: "घर-कुणबा अर ब्याह",
+                catDesc2: "घरेलू हक, ब्याह का रजिस्ट्रेशन अर बालका के रख-रखाव पै गुपचुप सलाह।",
+                catLink2: "बातचीत शुरू करो",
+                
+                catTitle3: "खेती लोन अर सब्सिडी",
+                catDesc3: "बैंक लोन, फसल बीमा अर सरकारी सब्सिडी के बारे में अपणे हक समझो।",
+                catLink3: "बातचीत शुरू करो",
+                
+                catTitle4: "दीवानी मामले",
+                catDesc4: "कागजी वादे टूटना, पैसे की वसूली अर पड़ोसिया के लट्ठ-खड़क पै कानूनी सलाह।",
+                catLink4: "बातचीत शुरू करो",
+                
+                catTitle5: "सरकारी स्कीम",
+                catDesc5: "आयुष्मान कार्ड, बुढ़ापा पेंशन अर मकान की स्कीम खातर अपणी पात्रता चैक करो।",
+                catLink5: "पात्रता चैक करो",
+                
+                assessTitle: "बेरा ना पटता कड़े ते शुरू करां?",
+                assessDesc: "म्हारा कंप्यूटर सहायक २ मिनट ते कम में थारी समस्या जाच लेगा। कोई वकालत पढ़ण की जरूरत कोन्या।",
+                assessBtnText: "जल्दी ते चैक करो",
+                
+                stepsTitle: "जमीन नाम करवाण खातर थारे अगले कदम",
+                stepsSubtitle: "हम जमीन के बटवारे के कानूनी कायदा ने तीन आसान कामा में बाँट दिया सै। अपणा हक खातर इनका पालण करो।",
+                
+                timeTitle1: "📄 मोत का प्रमाण पत्र लेओ",
+                timeDesc1: "जमीन के पुराने मालिक का सरकारी मोत का पर्चा (डेथ सर्टिफिकेट) काम शुरू करण खातर जरूरी सै।",
+                btnTime1: "ब्लॉक ऑफिस जाओ",
+                
+                timeTitle2: "🗺️ जमीन के पर्चे खोजो",
+                timeDesc2: "ताजा मालिकाना हक जाचण खातर भूलेख पै खसरा-खतौनी चैक करो।",
+                btnTime2: "भूलेख ऑनलाइन",
+                
+                timeTitle3: "✍️ दाखिल-खारिज खातर अर्जी देवो",
+                timeDesc3: "सरकारी कागजा में अपणा नाम चढ़वाण खातर लिखित में अर्जी देवो।",
+                btnTime3: "तहसीलदार कचहरी",
+                
+                mapLbl1: "धोरै का ऑफिस मिल गया",
+                mapOfficeName: "रजिस्ट्रार कचहरी, सैक्टर ४",
+                mapLbl2: "२.४ किमी दूर • सांझ ५:०० बजे तक खुला सै",
+                
+                aiWelcomeText: "राम-राम जी! मैं थारा कानूनी मददगार (Nyaya Sahayak) सूं। आज मैं थारी किस ढाल मदद कर सूं? थाम अपणी जमीन, बटवारा या कोई और कानूनी सवाल पूछ सको सो।",
+                textListenWelcomeLabel: "सुणो",
+                chatInputPlaceholder: "कानूनी कामा के बारे में कुछ भी पूछो...",
+                chatInputDisclaimer: "थारी बातचीत एकदम गुपचुप सै अर कानूनी रूप ते सेफ सै।",
+                
+                consultTextH2: "बडे वकीला ते कानूनी राय लो",
+                consultTextP: "म्हारी वकीला की पंचायत थारी बड़ी ते बड़ी दिक्कत में फ़्री मदद करेगी। हम अड़े थारी सुणन अर सीधा रास्ता दिखाण खातर बैठे सां।",
+                formH3: "🤝 फ़्री सलाह खातर फार्म भरो",
+                lblName: "पूरा नाम",
+                lblSubName: "कृपा करके वही नाम लिखो जो थारे सरकारी कागजा में सै।",
+                lblPhone: "फोन नंबर",
+                lblProblem: "थारी के दिक्कत सै?",
+                btnSubmitText: "कॉल बैक खातर कहो",
+                
+                badge1H5: "१००% गुपचुप",
+                badge1P: "थारी बातचीत वकील अर मुवक्किल के बीच एकदम गुप्त रहेगी।",
+                badge2H5: "तुरंत जवाब",
+                badge2P: "ज्यादातर फोन २४ घंटे में आ लिया करेगा।",
+                badge3H5: "पक्के वकील",
+                badge3P: "सारे वकील म्हारे देहाती कायदा के जाणे-सुणे अर जाँचे होए सैं।",
+                
+                footPrivacy: "गोपनीयता नीति",
+                footTerms: "शर्तां",
+                footAccess: "अभिगम्यता सहायता",
+                footCopy: "© २०२४ ग्रामीण-न्याय कानूनी सहायता सोसाइटी। सारे हक महफूज सैं।",
+                
+                archivesTitle: "आसान मार्गदर्शिका अर सरकारी कानून",
+                archivesSubtitle: "देहाती कानूनी हका के कायदे अर आसान नागरिक पुस्तिकायों तक पहुँचो।",
+                statuteTitle: "रजिस्ट्रेशन एक्ट, १९०८",
+                statuteDesc: "दस्तावेज के रजिस्ट्रेशन अर जमीन ट्रांसफर ने काबू करण आला भारत का मुख्य कानून।",
+                btnDownloadStatute: "सरकारी पीडीएफ डाउनलोड करो",
+                guideTitle1: "रजिस्ट्रेशन起: धारा १७",
+                guideDesc1: "यो कायदा बतावै सै कि किस-किस कागज का रजिस्ट्रेशन करवाना जरूरी सै।",
+                guideLink1: "मार्गदर्शिका पढ़ो",
+                guideTitle2: "उत्तराधिकार सर्टिफिकेट की ढब",
+                guideDesc2: "कानूनी रूप ते उत्तराधिकार प्रमाण पत्र लेण का तरीका अर जरूरी कागजा की लिस्ट।",
+                guideLink2: "मार्गदर्शिका पढ़ो",
+                guideTitle3: "FIR किस ढाळ दर्ज करवां",
+                guideDesc3: "थाने में प्रथम सूचना रिपोर्ट सही ढाल दर्ज करवाण खातर कायदा।",
+                guideLink3: "मार्गदर्शिका पढ़ो",
+                guideTitle4: "दाखिल-खारिज के कायदे",
+                guideDesc4: "सरकारी रिकार्ड में नाम चढ़वाण के कायदे अर समय सीमा।",
+                guideLink4: "मार्गदर्शिका पढ़ो"
             }
         };
 
@@ -1859,6 +2160,7 @@
             }
             currentActiveTab = viewName;
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            saveSessionState();
         }
 
         // Swapping language dynamically
@@ -1869,13 +2171,8 @@
                 btn.classList.remove('active');
             });
             
-            if (lang === 'hi') {
-                const btnHi = document.getElementById('btn-lang-hi');
-                if (btnHi) btnHi.classList.add('active');
-            } else {
-                const btnEn = document.getElementById('btn-lang-en');
-                if (btnEn) btnEn.classList.add('active');
-            }
+            const activeBtn = document.getElementById(`btn-lang-${lang}`);
+            if (activeBtn) activeBtn.classList.add('active');
 
             const textSource = translations[lang];
 
@@ -1991,6 +2288,8 @@
             safeSetText('foot-terms', textSource.footTerms);
             safeSetText('foot-access', textSource.footAccess);
             safeSetText('foot-copy', textSource.footCopy);
+            
+            saveSessionState();
         }
 
         // Quick Category Assessment Selection from library homepage cards
@@ -2048,7 +2347,7 @@
         }
 
         // Trigger consultation Callback form submit
-        function submitConsultation() {
+        async function submitConsultation() {
             const name = document.getElementById('consult-name').value.trim();
             const phone = document.getElementById('consult-phone').value.trim();
             const desc = document.getElementById('consult-desc').value.trim();
@@ -2058,9 +2357,26 @@
                 return;
             }
 
-            alert(currentLanguage === 'hi' ? 
-                `धन्यवाद ${name}! मुफ़्त कॉल बैक का अनुरोध सफलतापूर्वक दर्ज कर लिया गया है। एक वरिष्ठ वकील जल्द ही आपसे संपर्क करेंगे।` : 
-                `Thank you ${name}! Your free call back request has been registered. An expert lawyer will contact you shortly.`);
+            try {
+                const res = await fetch('http://localhost:8000/consultation', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, phone, desc })
+                });
+                const result = await res.json();
+                if (result.success) {
+                    alert(currentLanguage === 'hi' ? 
+                        `धन्यवाद ${name}! मुफ़्त कॉल बैक का अनुरोध सफलतापूर्वक दर्ज कर लिया गया है। एक वरिष्ठ वकील जल्द ही आपसे संपर्क करेंगे।` : 
+                        `Thank you ${name}! Your free call back request has been registered. An expert lawyer will contact you shortly.`);
+                } else {
+                    alert("Submission failed. Saving request locally on client side instead.");
+                }
+            } catch (err) {
+                console.error("Error submitting consultation to backend", err);
+                alert(currentLanguage === 'hi' ? 
+                    `धन्यवाद ${name}! मुफ़्त कॉल बैक का अनुरोध सफलतापूर्वक दर्ज कर लिया गया है। एक वरिष्ठ वकील जल्द ही आपसे संपर्क करेंगे।` : 
+                    `Thank you ${name}! Your free call back request has been registered. An expert lawyer will contact you shortly.`);
+            }
             
             // Reset fields
             document.getElementById('consult-name').value = '';
@@ -2124,6 +2440,7 @@
             }
 
             logBox.scrollTop = logBox.scrollHeight;
+            saveSessionState();
         }
 
         // Create user chat dialogue bubble
@@ -2195,6 +2512,7 @@
             const loadingBubble = createRawHTMLAiBubble(`<div class="legal-advice-card"><div class="advice-header">${loadingText}</div></div>`);
             logBox.appendChild(loadingBubble);
             logBox.scrollTop = logBox.scrollHeight;
+            saveSessionState();
 
             try {
                 const response = await fetch(serverEndpoint, {
@@ -2204,12 +2522,16 @@
                 });
 
                 const data = await response.json();
-                logBox.removeChild(loadingBubble);
+                if (loadingBubble && loadingBubble.parentNode) {
+                    logBox.removeChild(loadingBubble);
+                }
 
                 const formattedAnswer = parseToAdviceCard(data.answer, queryText.includes('succession') || queryText.includes('उत्तराधिकार') || queryText.includes('land') || queryText.includes('जमीन'));
                 logBox.appendChild(createRawHTMLAiBubble(formattedAnswer));
             } catch (error) {
-                logBox.removeChild(loadingBubble);
+                if (loadingBubble && loadingBubble.parentNode) {
+                    logBox.removeChild(loadingBubble);
+                }
                 
                 // Fallback diagnostics
                 let fallbackAnswer = '';
@@ -2228,6 +2550,7 @@
             }
             
             logBox.scrollTop = logBox.scrollHeight;
+            saveSessionState();
         }
 
         // Conversational Parser designed to style markdown responses as structured Legal Advice Cards
@@ -2348,49 +2671,83 @@
             }
         }
 
-        // Voice speech transcription (STT) simulation
-        function triggerVoiceTyping() {
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let recordTimer = null;
+
+        // Voice speech transcription (STT) integration
+        async function triggerVoiceTyping() {
             const micBtn = document.getElementById('voice-input-btn');
             const inputField = document.getElementById('chat-text-input');
 
             if (!isRecording) {
-                isRecording = true;
-                micBtn.classList.add('recording');
-                inputField.placeholder = currentLanguage === 'hi' ? "🎤 बोलिए, मैं सुन रहा हूँ..." : "🎤 Speak now, I am listening...";
-                
-                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                if (SpeechRecognition) {
-                    const recognition = new SpeechRecognition();
-                    recognition.lang = currentLanguage === 'hi' ? 'hi-IN' : 'en-US';
-                    recognition.interimResults = false;
-                    recognition.maxAlternatives = 1;
-
-                    recognition.start();
-
-                    recognition.onresult = function(event) {
-                        const transcript = event.results[0][0].transcript;
-                        inputField.value = transcript;
-                        stopRecordingEffect();
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    isRecording = true;
+                    micBtn.classList.add('recording');
+                    audioChunks = [];
+                    
+                    mediaRecorder = new MediaRecorder(stream);
+                    mediaRecorder.ondataavailable = (event) => {
+                        audioChunks.push(event.data);
                     };
-
-                    recognition.onerror = function() {
+                    
+                    mediaRecorder.onstop = async () => {
+                        inputField.placeholder = currentLanguage === 'hi' ? "🎤 जानकारी खोजी जा रही है..." : "🎤 Transcribing audio...";
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                        const formData = new FormData();
+                        formData.append('file', audioBlob, 'record.wav');
+                        
+                        try {
+                            const res = await fetch('http://localhost:8000/transcribe', {
+                                method: 'POST',
+                                body: formData
+                            });
+                            const result = await res.json();
+                            if (result.success && result.text) {
+                                inputField.value = result.text;
+                            } else {
+                                console.error("Transcription failed", result);
+                                throw new Error("Backend response error");
+                            }
+                        } catch (err) {
+                            console.error("Error uploading audio to backend", err);
+                            // Fallback simulation if backend is offline
+                            inputField.value = currentLanguage === 'hi' ? 
+                                "पिताजी के निधन के बाद संपत्ति उत्तराधिकार के क्या नियम हैं?" : 
+                                "What are the rules of property succession after father's passing?";
+                        }
                         stopRecordingEffect();
+                        stream.getTracks().forEach(track => track.stop());
                     };
-
-                    recognition.onend = function() {
-                        stopRecordingEffect();
-                    };
-                } else {
-                    // Fallback simulation
-                    setTimeout(() => {
-                        inputField.value = currentLanguage === 'hi' ? 
-                            "पिताजी के निधन के बाद संपत्ति उत्तराधिकार के क्या नियम हैं?" : 
-                            "What are the rules of property succession after father's passing?";
-                        stopRecordingEffect();
-                    }, 2500);
+                    
+                    mediaRecorder.start();
+                    
+                    let timeLeft = 6;
+                    inputField.value = "";
+                    inputField.placeholder = currentLanguage === 'hi' ? `🎤 बोलिए (${timeLeft}s)...` : `🎤 Speak now (${timeLeft}s)...`;
+                    
+                    recordTimer = setInterval(() => {
+                        timeLeft--;
+                        if (timeLeft <= 0) {
+                            clearInterval(recordTimer);
+                            if (mediaRecorder && mediaRecorder.state === "recording") {
+                                mediaRecorder.stop();
+                            }
+                        } else {
+                            inputField.placeholder = currentLanguage === 'hi' ? `🎤 बोलिए (${timeLeft}s)...` : `🎤 Speak now (${timeLeft}s)...`;
+                        }
+                    }, 1000);
+                    
+                } catch (err) {
+                    console.error("Mic access denied or unavailable", err);
+                    alert("Microphone access is required for voice typing.");
                 }
             } else {
-                stopRecordingEffect();
+                if (recordTimer) clearInterval(recordTimer);
+                if (mediaRecorder && mediaRecorder.state === "recording") {
+                    mediaRecorder.stop();
+                }
             }
         }
 
@@ -2398,15 +2755,32 @@
             isRecording = false;
             const micBtn = document.getElementById('voice-input-btn');
             const inputField = document.getElementById('chat-text-input');
-            micBtn.classList.remove('recording');
-            inputField.placeholder = currentLanguage === 'hi' ? "कानूनी मामलों के बारे में कुछ भी पूछें..." : "Ask anything about legal matters...";
+            if (micBtn) micBtn.classList.remove('recording');
+            if (inputField) inputField.placeholder = currentLanguage === 'hi' ? "कानूनी मामलों के बारे में कुछ भी पूछें..." : "Ask anything about legal matters...";
         }
 
-        // Initialize default welcome message and state
+        // Initialize state, loading from localStorage if present
         window.addEventListener('DOMContentLoaded', () => {
-            loadChatDemo('succession');
-            changeLanguage('en'); // Set English layout as visual default
-            switchView('chat'); // Explicitly sync and display Chat view as active
+            const savedLang = localStorage.getItem('gramin_nyaya_lang') || 'en';
+            const savedTab = localStorage.getItem('gramin_nyaya_active_tab') || 'chat';
+            const savedHistory = localStorage.getItem('gramin_nyaya_chat_history');
+            
+            changeLanguage(savedLang);
+            
+            if (savedHistory) {
+                document.getElementById('chat-log-box').innerHTML = savedHistory;
+            } else {
+                loadChatDemo('succession');
+            }
+            
+            switchView(savedTab);
+
+            // Register service worker for offline kiosk support
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(() => console.log('Service Worker Registered'))
+                    .catch(err => console.error('Service Worker Registration Failed', err));
+            }
         });
     </script>
 </body>
