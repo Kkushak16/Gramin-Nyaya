@@ -169,28 +169,41 @@
             gap: 16px;
         }
 
-        .lang-switcher {
-            display: flex;
-            gap: 4px;
-            border: 1px solid var(--border-color);
-            padding: 3px;
-            border-radius: 8px;
+        .lang-select-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .lang-select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
             background-color: var(--bg-card);
-        }
-
-        .lang-switcher button {
-            background: none;
-            border: none;
-            padding: 6px 12px;
-            font-size: 0.78rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px 32px 8px 12px;
+            font-size: 0.82rem;
             font-weight: 600;
-            border-radius: 6px;
-            color: var(--color-text-secondary);
+            color: var(--color-text-primary);
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s ease;
         }
 
-        .lang-switcher button.active {
-            background-color: var(--color-primary);
-            color: #ffffff;
+        .lang-select:hover, .lang-select:focus {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(5, 29, 64, 0.08);
+        }
+
+        .lang-select-wrapper::after {
+            content: "▼";
+            font-size: 0.55rem;
+            color: var(--color-text-secondary);
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
         }
 
         .profile-avatar-btn {
@@ -1282,13 +1295,14 @@
         </nav>
         
         <div class="header-actions">
-            <!-- Language switcher beside the profile icon -->
-            <div class="lang-switcher">
-                <button id="btn-lang-hi" class="active" onclick="changeLanguage('hi')">HI</button>
-                <button id="btn-lang-en" onclick="changeLanguage('en')">EN</button>
-                <button id="btn-lang-bh" onclick="changeLanguage('bh')">BH</button>
-                <button id="btn-lang-aw" onclick="changeLanguage('aw')">AW</button>
-                <button id="btn-lang-hr" onclick="changeLanguage('hr')">HR</button>
+            <div class="lang-select-wrapper">
+                <select id="lang-select-dropdown" class="lang-select" onchange="changeLanguage(this.value)">
+                    <option value="en">English (EN)</option>
+                    <option value="hi">हिंदी (HI)</option>
+                    <option value="bh">भोजपुरी (BH)</option>
+                    <option value="aw">अवधी (AW)</option>
+                    <option value="hr">हरियाणवी (HR)</option>
+                </select>
             </div>
             
             <button class="profile-avatar-btn" onclick="alert(currentLanguage === 'hi' ? 'प्रोफ़ाइल सेटिंग्स अनुभाग विकास के अधीन है।' : 'Profile settings section is under development.')">
@@ -2167,12 +2181,8 @@
         function changeLanguage(lang) {
             currentLanguage = lang;
             
-            document.querySelectorAll('.lang-switcher button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            const activeBtn = document.getElementById(`btn-lang-${lang}`);
-            if (activeBtn) activeBtn.classList.add('active');
+            const dropdown = document.getElementById('lang-select-dropdown');
+            if (dropdown) dropdown.value = lang;
 
             const textSource = translations[lang];
 
@@ -2770,7 +2780,7 @@
             if (savedHistory) {
                 document.getElementById('chat-log-box').innerHTML = savedHistory;
             } else {
-                loadChatDemo('succession');
+                loadChatDemo();
             }
             
             switchView(savedTab);
