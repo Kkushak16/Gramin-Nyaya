@@ -171,3 +171,339 @@ body {
     gap: 0.2rem;
   }
 }
+
+/* --- AEO/GEO KNOWLEDGE HUB STYLES --- */
+.aeo-hub-container {
+  width: 100%;
+  max-width: 700px;
+  background-color: white;
+  border-radius: 1.5rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+  padding: 2.5rem 2rem;
+  margin-top: 3rem;
+  box-sizing: border-box;
+  border-top: 6px solid #ea580c;
+}
+
+.aeo-badge {
+  display: inline-block;
+  background-color: #ffedd5;
+  color: #c2410c;
+  padding: 0.4rem 0.8rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.aeo-title {
+  color: #111827;
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin: 0 0 0.5rem 0;
+}
+
+.aeo-subtitle {
+  color: #4b5563;
+  font-size: 1.05rem;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.5;
+}
+
+.author-byline {
+  font-size: 0.9rem;
+  color: #6b7280;
+  border-bottom: 1px solid #f3f4f6;
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+}
+
+.author-bio-card {
+  background-color: #fafaf9;
+  border: 1px solid #e7e5e4;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.author-bio-card h3 {
+  margin: 0;
+  color: #1c1917;
+  font-size: 1.2rem;
+}
+
+.author-bio-card p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #44403c;
+  line-height: 1.6;
+}
+
+.toc-container {
+  background-color: #fafaf9;
+  border: 1px solid #e7e5e4;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.toc-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1c1917;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+@media (min-width: 600px) {
+  .toc-list {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem 1.5rem;
+  }
+}
+
+.toc-list a {
+  text-decoration: none;
+  color: #c2410c;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: color 0.15s ease;
+}
+
+.toc-list a:hover {
+  color: #ea580c;
+}
+
+.hub-section {
+  margin-bottom: 3rem;
+  border-bottom: 1px solid #f3f4f6;
+  padding-bottom: 2.5rem;
+}
+
+.hub-section:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.hub-section h3 {
+  color: #111827;
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.hub-section p {
+  font-size: 1.05rem;
+  color: #374151;
+  line-height: 1.6;
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+}
+
+.hub-figure {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  text-align: center;
+}
+
+.hub-figure img {
+  max-width: 100px;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.hub-figcaption {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+.definition-list {
+  background-color: #fafaf9;
+  border: 1px solid #e7e5e4;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.definition-list dt {
+  font-weight: 700;
+  color: #7c2d12;
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+}
+
+.definition-list dd {
+  color: #4b5563;
+  margin-left: 0;
+  margin-bottom: 1.25rem;
+  font-size: 0.98rem;
+}
+
+.definition-list dd:last-child {
+  margin-bottom: 0;
+}
+
+.data-table-wrapper {
+  overflow-x: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  margin: 1.5rem 0;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.data-table th {
+  background-color: #f3f4f6;
+  color: #111827;
+  font-weight: 700;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.data-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  color: #374151;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.steps-list {
+  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.steps-list li {
+  color: #374151;
+  font-size: 1.02rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
+}
+
+.code-block-wrapper {
+  margin: 1.5rem 0;
+  background-color: #1e293b;
+  border-radius: 1rem;
+  padding: 1.25rem;
+  overflow-x: auto;
+}
+
+.code-block {
+  margin: 0;
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: #38bdf8;
+}
+
+.quote-block {
+  border-left: 4px solid #ea580c;
+  background-color: #fff7ed;
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 0 1rem 1rem 0;
+}
+
+.quote-block p {
+  font-style: italic;
+  color: #7c2d12;
+  margin: 0 0 0.5rem 0 !important;
+}
+
+.quote-block cite {
+  font-size: 0.9rem;
+  color: #c2410c;
+  font-weight: 600;
+  display: block;
+}
+
+.trust-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1.5rem 0;
+}
+
+.trust-badge-item {
+  background-color: #f3f4f6;
+  color: #374151;
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  border: 1px solid #e5e7eb;
+}
+
+.faq-details {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  margin-bottom: 0.75rem;
+  background-color: white;
+  overflow: hidden;
+}
+
+.faq-details summary {
+  padding: 1rem;
+  font-weight: 700;
+  color: #111827;
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+  background-color: #fafafa;
+}
+
+.faq-details p {
+  padding: 1rem;
+  margin: 0;
+  border-top: 1px solid #e5e7eb;
+  color: #4b5563;
+  background-color: white;
+}
+
+.video-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid #e5e7eb;
+  margin: 1.5rem 0;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
