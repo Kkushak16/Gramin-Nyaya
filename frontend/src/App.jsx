@@ -11,9 +11,9 @@ function App() {
 
   const askAI = async () => {
     if (!question.trim()) return;
-    
+
     setLoading(true);
-    setAnswer(""); 
+    setAnswer("");
 
     try {
       const response = await fetch(`${API_URL}/ask`, {
@@ -28,10 +28,9 @@ function App() {
 
       const data = await response.json();
       setAnswer(data.answer);
-      
     } catch (error) {
       console.error("Fetch error:", error);
-      setAnswer("Sorry, there is a problem connecting to the server. Please ensure the backend is running.");
+      setAnswer("क्षमा करें, सर्वर से जुड़ने में समस्या हो रही है। कृपया जांचें कि backend चल रहा है।");
     } finally {
       setLoading(false);
     }
@@ -39,41 +38,61 @@ function App() {
 
   return (
     <div className="app-container">
-      {/* Header */}
       <header className="header">
         <h1>ग्रामीण न्याय (Gramin-Nyaya)</h1>
         <p>आपका डिजिटल कानूनी सहायक</p>
       </header>
 
-      {/* Main Card */}
       <main className="main-card">
-        <label className="input-label">
-          अपना सवाल यहाँ लिखें:
-        </label>
-        
-        <textarea 
-          className="text-area"
-          placeholder="जैसे: रजिस्ट्री के लिए क्या चाहिए?"
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-        />
+        <section className="query-section" aria-labelledby="query-heading">
+          <h2 id="query-heading" className="section-title">कानूनी सवाल पूछें</h2>
 
-        <button 
-          onClick={askAI}
-          disabled={loading || !question.trim()} 
-          className="submit-btn"
-        >
-          {loading ? "सोच रहा हूँ..." : "जवाब जानें"}
-        </button>
+          <label className="input-label" htmlFor="legal-question">
+            अपना सवाल यहाँ लिखें:
+          </label>
 
-        {/* Answer Section */}
+          <textarea
+            id="legal-question"
+            className="text-area"
+            placeholder="जैसे: रजिस्ट्री के लिए क्या चाहिए?"
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+          />
+
+          <button
+            onClick={askAI}
+            disabled={loading || !question.trim()}
+            className="submit-btn"
+          >
+            {loading ? "सोच रहा हूँ..." : "जवाब जानें"}
+          </button>
+        </section>
+
+        <section className="facts-section" aria-labelledby="facts-heading">
+          <h2 id="facts-heading" className="section-title">परियोजना तथ्य</h2>
+          <dl className="facts-list">
+            <div>
+              <dt>Author:</dt>
+              <dd>Kkushak16, project creator and AI/RAG application developer.</dd>
+            </div>
+            <div>
+              <dt>Legal source:</dt>
+              <dd>Registration Act, 1908 source documents included in this repository.</dd>
+            </div>
+            <div>
+              <dt>Review status:</dt>
+              <dd>Legal information only; important matters should be checked by a qualified legal professional.</dd>
+            </div>
+          </dl>
+        </section>
+
         {answer && (
-          <div className="answer-box" aria-live="polite">
-            <h2 className="answer-title">⚖️ कानूनी परामर्श:</h2>
+          <section className="answer-box" aria-live="polite" aria-labelledby="answer-heading">
+            <h2 id="answer-heading" className="answer-title">कानूनी परामर्श:</h2>
             <div className="answer-content">
               <ReactMarkdown>{answer}</ReactMarkdown>
             </div>
-          </div>
+          </section>
         )}
       </main>
 

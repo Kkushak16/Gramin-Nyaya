@@ -1,54 +1,68 @@
-# ⚖️ Gramin-Nyaya: AI Legal Assistant
+# Gramin-Nyaya: AI Legal Assistant
 
-**Gramin-Nyaya** (Rural Justice) is an offline, privacy-first AI assistant designed to bridge the legal information gap for rural populations in India. Built specifically to run on constrained edge hardware (NVIDIA Jetson), the system provides grounded, simplified legal guidance from the **Registration Act, 1908** in high-quality Hindi.
+## Project Overview
 
----
+**Project:** Gramin-Nyaya  
+**Purpose:** Offline, privacy-first legal information assistance for rural users in India.  
+**Primary law covered:** Registration Act, 1908.  
+**Primary language:** Hindi, with legal retrieval grounded in English source text.  
+**Deployment target:** Low-memory edge hardware such as NVIDIA Jetson.  
+**Privacy model:** Local-only processing; user questions and responses do not need to leave the device.  
+**Status:** Prototype legal information system, not a substitute for a licensed lawyer.
 
-## 🚀 Key Features
+Gramin-Nyaya, meaning Rural Justice, is an offline AI assistant designed to reduce the legal information gap for rural communities. It provides simplified Hindi answers grounded in official legal documents, with a retrieval workflow tuned for constrained edge devices.
 
-* **Edge-Optimized Pipeline:** Powered by **Llama 3.2 (1B)** via Ollama. The architecture is strictly optimized to run efficiently on low-memory edge devices without crashing.
-* **100% Offline & Private:** Runs entirely on local hardware. No audio or text data ever leaves the device—crucial for maintaining absolute confidentiality in legal matters.
-* **"English-in, Hindi-out" RAG:** Uses a highly accurate cross-lingual retrieval strategy. The AI searches clean English text to maintain flawless logical accuracy, but is prompted to translate and deliver its final response in simple Devanagari Hindi to prevent "token explosion."
-* **Voice-Ready:** Integrated with **Faster-Whisper (Small)** for highly accurate Hindi speech-to-text, allowing users to ask questions naturally via voice input.
-* **Hallucination Control:** Uses LangChain and ChromaDB to ensure every answer is strictly grounded in official legal documents. If the law isn't in the text, the AI safely refuses to answer.
+## Author And Review
 
----
+**Author:** Kkushak16, project creator and repository maintainer.  
+**Technical credentials:** AI/RAG application developer responsible for the FastAPI backend, React frontend, ChromaDB retrieval workflow, and Ollama LLM integration.  
+**Legal source credentials:** Answers are grounded in the included Registration Act, 1908 source documents.  
+**Review note:** This project provides legal information only. Important matters should be reviewed by a qualified legal professional.
 
-## 🤖 The Architecture
+## Key Features
 
-To maximize reasoning on a 1B parameter model, Gramin-Nyaya avoids messy PDFs and complex native Hindi tokenization. Instead, it uses a **Cross-Lingual Workflow**:
+**Edge-optimized pipeline:** Powered by Llama 3.2 1B through Ollama and tuned for low-memory devices.  
+**Offline operation:** Runs locally without requiring cloud-hosted inference.  
+**Privacy-first design:** Keeps legal questions and generated answers on the user's device or local network.  
+**Cross-lingual RAG:** Retrieves from clean English legal text, then produces simplified Devanagari Hindi answers.  
+**Voice-ready architecture:** Designed to integrate with Faster-Whisper for Hindi speech-to-text.  
+**Grounded responses:** Uses LangChain and ChromaDB so answers are based on retrieved legal document chunks.
 
-1.  **Ingestion:** The legal document (`registrationActEnglish.txt`) is chunked and embedded into a local ChromaDB vector store.
-2.  **Retrieval:** User queries (in Hindi) are mapped to the highly accurate English legal chunks.
-3.  **Generation:** Llama 3.2:1b reads the retrieved English facts, extracts the exact legal metrics (e.g., limits like "100 rupees" or "4 months"), and safely formats the final output into simplified Hindi for the user.
+## Architecture
 
----
+**Ingestion:** The legal document `registrationActEnglish.txt` is chunked and embedded into a local ChromaDB vector store.  
+**Retrieval:** Hindi user questions are mapped to relevant English legal chunks.  
+**Generation:** Llama 3.2 1B reads the retrieved facts, preserves legal values such as dates, sections, amounts, and limits, then formats the final response in simple Hindi.  
+**Fallback behavior:** If the answer is not present in the retrieved legal context, the assistant should refuse to invent an answer.
 
-## 🛠️ Tech Stack & Libraries
+## Tech Stack And Libraries
 
-This project uses a lean, bloat-free stack designed for edge deployment:
+**Core language:** Python 3.10+  
+**LLM engine:** `ollama` with `llama3.2:1b`  
+**RAG framework:** `langchain`, `langchain-community`  
+**Vector database:** `chromadb`  
+**Embeddings:** `langchain-huggingface`, `sentence-transformers` using `paraphrase-multilingual-MiniLM-L12-v2`  
+**Voice and STT:** `faster-whisper`, `pyaudio`  
+**Web server and API:** `fastapi`, `uvicorn`  
+**Frontend:** React, Vite, `react-markdown`  
+**Document utilities:** `pypdf`
 
-* **Core Logic:** Python 3.10+
-* **LLM Engine:** `ollama` (Running `llama3.2:1b`)
-* **RAG Framework:** `langchain`, `langchain-community`
-* **Vector Database:** `chromadb`
-* **Embeddings:** `langchain-huggingface`, `sentence-transformers` (Model: *paraphrase-multilingual-MiniLM-L12-v2*)
-* **Voice / STT:** `faster-whisper`, `pyaudio`
-* **Web Server / API:** `fastapi`, `uvicorn`
-* **Utilities:** `pypdf` (For legacy document conversion)
-
----
-
-## 📂 Project Structure
+## Project Structure
 
 ```text
 Gramin-Nyaya/
-├── legal_docs/             # Clean text source files (registrationActEnglish.txt)
+├── legal_docs/             # Source legal documents
 ├── chroma_db/              # Local vector database for semantic search
 ├── api.py                  # FastAPI server connecting backend to frontend
-├── rag_logic.py            # LangChain RAG pipeline & LLM prompting logic
-├── stt_service.py          # Voice-to-Text transcription service
-├── gramin_nyaya_main.py    # Main CLI-based controller and testing loop
+├── rag_logic.py            # LangChain RAG pipeline and LLM prompting logic
 ├── ingest_docs.py          # Script to chunk and embed documents into ChromaDB
-├── requirements.txt        # Exact Python dependencies
-└── index.html              # Village-friendly Web Interface
+├── frontend/               # React and Vite web interface
+└── README.md               # Project overview, author details, and setup notes
+```
+
+## Usage Notes
+
+**Backend command:** `uvicorn api:app --host 0.0.0.0 --port 8000`  
+**Frontend command:** `npm run dev` from the `frontend` directory.  
+**API endpoint:** `POST /ask` with a JSON body containing `question`.  
+**Expected answer format:** Simple Hindi legal information grounded in retrieved document text.

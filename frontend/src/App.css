@@ -59,6 +59,12 @@ body {
   margin-bottom: 1rem;
 }
 
+.section-title {
+  color: #1f2937;
+  font-size: 1.35rem;
+  margin: 0 0 1rem;
+}
+
 .text-area {
   width: 100%;
   padding: 1rem;
@@ -99,6 +105,35 @@ body {
   transform: none;
 }
 
+.facts-section {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #fed7aa;
+}
+
+.facts-list {
+  display: grid;
+  gap: 0.85rem;
+  margin: 0;
+}
+
+.facts-list div {
+  display: grid;
+  grid-template-columns: minmax(120px, 0.35fr) 1fr;
+  gap: 0.75rem;
+  align-items: start;
+}
+
+.facts-list dt {
+  color: #7c2d12;
+  font-weight: 700;
+}
+
+.facts-list dd {
+  color: #374151;
+  margin: 0;
+}
+
 .answer-box {
   margin-top: 2rem;
   padding: 1.5rem;
@@ -128,4 +163,11 @@ body {
   margin-top: 2rem;
   color: #6b7280;
   font-size: 0.9rem;
+}
+
+@media (max-width: 520px) {
+  .facts-list div {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
 }
