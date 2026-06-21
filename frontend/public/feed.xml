@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>Gramin-Nyaya Legal Aid Society News</title>
+  <link>https://gramin-nyaya-eight.vercel.app</link>
+  <description>Latest news, documentation updates, and statutory guides for offline-first legal empowerment in rural India.</description>
+  <language>en-us</language>
+  <pubDate>Sun, 21 Jun 2026 00:00:00 GMT</pubDate>
+  <lastBuildDate>Sun, 21 Jun 2026 00:00:00 GMT</lastBuildDate>
+  <atom:link href="https://gramin-nyaya-eight.vercel.app/feed.xml" rel="self" type="application/rss+xml" />
+  
+  <item>
+    <title>Registration Act, 1908: Offline Legal Guide Launch</title>
+    <link>https://gramin-nyaya-eight.vercel.app/about.html</link>
+    <guid>https://gramin-nyaya-eight.vercel.app/about.html</guid>
+    <pubDate>Sun, 21 Jun 2026 00:00:00 GMT</pubDate>
+    <description>Gramin-Nyaya has successfully deployed a comprehensive interactive guide and assistant for the Registration Act, 1908, helping rural citizens learn about property registration, death certificate mutations, and statutory inheritance rules in their own regional languages.</description>
+  </item>
+</channel>
+</rss>
